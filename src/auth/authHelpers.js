@@ -94,15 +94,15 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 	}
 };
 
-const userData = {
-	email: 'khughessean001@yahoo.com',
-	password: '@Test12345',
-	username: 'testingFromFile_2',
-};
+// const userData = {
+// 	email: 'khughessean001@yahoo.com',
+// 	password: '@Test12345',
+// 	username: 'testingFromFile_2',
+// };
 
-(async () => {
-	await signUpEmailAndPassword(userData);
-})();
+// (async () => {
+// 	await signUpEmailAndPassword(userData);
+// })();
 
 // Get user by email
 async function fetchUserProfileByEmail(email) {
