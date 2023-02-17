@@ -29,7 +29,7 @@ const validationSchema = yup.object().shape({
 		.required('Confirm Password is required'),
 });
 
-const SignUp = () => {
+const SignUp = ({ signUpEmailAndPassword }) => {
 	// Import RHF useForm
 	const {
 		register,
@@ -45,6 +45,22 @@ const SignUp = () => {
 	const email = watch('email');
 	const password = watch('password');
 	const passwordConfirm = watch('passwordConfirm');
+
+	const handleSignUp = async (e, { username, email, password }) => {
+		e.preventDefault();
+
+		console.log('User Deets', username, email, password);
+
+		const signUpResult = await signUpEmailAndPassword({
+			username,
+			email,
+			password,
+		});
+
+		console.log('signUpResult', signUpResult);
+
+		// Set state here and redirect on signup success
+	};
 
 	const disabledBtnClasses =
 		!username ||
@@ -137,6 +153,9 @@ const SignUp = () => {
 							errors?.passwordConfirm?.message
 								? 'Please complete the required fields to enable'
 								: 'Sign Up'
+						}
+						onClick={(e) =>
+							handleSubmit(handleSignUp(e, { username, email, password }))
 						}
 					>
 						SIGN UP

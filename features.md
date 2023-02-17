@@ -48,6 +48,9 @@ Additionaly, when all needed methods are implemented convert service to a cloud 
 - Use onAuthStateChanged to check emailVerified prop. If false, show alert and ask to resend email? Block certain features of app if not verified. e.g no uploads... 
 - Implement resend verification email functionality. 
 
+NOTES RE SIGNUP
+- Firebase already hashes the password upon Signup. So no need for brypt and no need to store hashed password in DB 17/02
+
 2. Logic for confirm sign up
 This route can only be accessed via Signup as step 1 of the flow
 - Return to this logic later when sendGrid or mailing service set up.

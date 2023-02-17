@@ -17,7 +17,10 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path={'/auth/signin'} element={<SignIn />} />
-				<Route path={'/auth/signup'} element={<SignUp />} />
+				<Route
+					path={'/auth/signup'}
+					element={<SignUp signUpEmailAndPassword={signUpEmailAndPassword} />}
+				/>
 				<Route path={'/auth/confirm-signup'} element={<ConfirmSignUp />} />
 				<Route path={'/auth/forgot-password'} element={<ForgotPassword />} />
 				<Route

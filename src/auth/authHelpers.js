@@ -17,8 +17,6 @@ import {
 	query,
 	where,
 } from 'firebase/firestore';
-// import dotenv from 'dotenv';
-// import bcrypt from 'bcrypt';
 
 import keys from '../keys.js';
 
@@ -46,10 +44,6 @@ const db = getFirestore(app);
 // Sign Up
 
 export const signUpEmailAndPassword = async ({ email, password, username }) => {
-	const saltRounds = 10;
-
-	// const encryptedPassword = await bcrypt.hash(password, saltRounds);
-
 	try {
 		// Create a user with email and password
 		const response = await createUserWithEmailAndPassword(
@@ -62,7 +56,6 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 
 		await setDoc(doc(db, 'users', user.uid), {
 			email: user.email,
-			password: encryptedPassword,
 			username: username,
 			userID: user.uid,
 			emailVerified: false,
