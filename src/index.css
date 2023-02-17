@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.signup-heading {
+	padding-top: 50px;
+}
+
+.signup-form {
+	margin-top: 15px;
+}
+
+@media (max-width: 480px) {
+	.form-padding {
+		padding: 0 18px;
+	}
+
+	.image-bg-mobile-only {
+		background-image: url('./assets/images//book-no-bg-trimmy.jpg');
+		background-position: center;
+		object-fit: cover;
+	}
+
+	.dark-layer {
+		position: relative;
+	}
+
+	.dark-layer::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0, 0, 0, 0.6);
+	}
+
+	.mobile-z-index {
+		z-index: 10;
+	}
+
+	.mobile-width-reset {
+		width: 95%;
+	}
+
+	.signup-heading {
+		padding-top: 0px;
+	}
+
+	.signup-form {
+		margin-top: 9px;
+	}
+}
+
+/* Scrollbar styles  */
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+	background-color: #dddee0;
+	cursor: pointer;
+	box-shadow: #0f2525 0px 7px 29px 0px;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: #111827;
+	cursor: pointer;
+}
