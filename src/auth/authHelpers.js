@@ -22,27 +22,19 @@ import {
 
 import keys from '../keys.js';
 
-// import { sendVerificationCode } from '../api/emailService.js';
+import { sendVerificationCode } from '../api/emailService.js';
 
-export const checkDevEnvVars = () => {
-	if (import.meta.env.MODE === 'development') {
-		console.log('Keys', keys);
-	} else {
-		// Use environment variables
-		console.log(process.env.API_KEY); // "your_prod_api_key"
-		console.log('Else Else S');
-	}
-};
+const isDevMode = import.meta.env.MODE === 'development' ? true : false;
 
-/*
-
-const firebaseConfig = {
-	apiKey: apiKey,
-	authDomain: authDomain,
-	projectId: projectId,
-	storageBucket: storageBucket,
-	messagingSenderId: messagingSenderId,
-	appId: appId,
+export const firebaseConfig = {
+	apiKey: isDevMode ? keys.API_KEY : process.env.API_KEY,
+	authDomain: isDevMode ? keys.AUTH_DOMAIN : process.env.AUTH_DOMAIN,
+	projectId: isDevMode ? keys.PROJECT_ID : process.env.PROJECT_ID,
+	storageBucket: isDevMode ? keys.STORAGE_BUCKET : process.env.STORAGE_BUCKET,
+	messagingSenderId: isDevMode
+		? keys.MESSAGING_SENDER_ID
+		: process.env.MESSAGING_SENDER_ID,
+	appId: isDevMode ? keys.APP_ID : process.env.APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -272,5 +264,3 @@ async function signUserOut() {
 // **check authstate logic
 
 // export default app;
-
-*/

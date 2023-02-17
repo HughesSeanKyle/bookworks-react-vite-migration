@@ -8,10 +8,10 @@ import ForgotPasswordConfirm from './pages/ForgotPasswordConfirm.jsx';
 import ConfirmSignUp from './pages/ConfirmSignUp.jsx';
 
 // Import all auth functions here and pass down as prop instead
-import { checkDevEnvVars } from './auth/authHelpers.js';
+import { signUpEmailAndPassword } from './auth/authHelpers.js';
 
 function App() {
-	checkDevEnvVars();
+	// console.log('firebaseConfig', firebaseConfig);
 
 	return (
 		<BrowserRouter>

@@ -114,3 +114,9 @@ NOTE: 12/02 - Opted to use regular express server and deploy to Vercel. Better d
 
 6. NOTE: Express API deployed to Render instead. 
 
+## Migration 
+1. 17/02/
+- Migrated from Create React App to React + Vite due to Webpack polyfil issues. 
+- Removing brcypt as Firebase already hashes passwords 
+- Removed dotenv library and store keys for dev and production separately.
+- Removed axios in favor of fetch to bypass axios 504 issue.  
