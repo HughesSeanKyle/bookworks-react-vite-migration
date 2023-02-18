@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import Dialog from '../components/Alerts/Dialog';
+
 const validationSchema = yup.object().shape({
 	username: yup
 		.string()
@@ -84,6 +86,20 @@ const SignUp = ({ signUpEmailAndPassword }) => {
 					<h2 className="text-4xl text-custom-white font-bold text-center">
 						SIGN UP
 					</h2>
+					{/* Alert */}
+					{/* <Dialog
+						feedbackColor={'green'}
+						feedbackHeading={'Success'}
+						feedbackMessage={
+							'Signup successful! Please enter code sent to your email'
+						}
+					/> */}
+					<Dialog
+						feedbackColor={'green'}
+						feedbackHeading={'Error'}
+						feedbackMessage={'Something went wrong'}
+					/>
+					{/* Alert */}
 					<div className="flex flex-col text-custom-white py-2">
 						<label>Username</label>
 						<input
