@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
 import { useForm } from 'react-hook-form';
@@ -6,6 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import DialogError from '../components/Alerts/DialogError';
 import DialogSuccess from '../components/Alerts/DialogSuccess';
+
+import { FaSpinner } from 'react-icons/fa';
 
 const validationSchema = yup.object().shape({
 	username: yup
@@ -47,12 +50,14 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 		setSignupSuccessFeedback,
 	} = writeAuthState;
 
+	const isFormSubmittingRef = useRef(null);
+
 	// Import RHF useForm
 	const {
 		register,
 		handleSubmit,
 		watch,
-		formState: { errors, isSubmitting },
+		formState: { errors },
 	} = useForm({
 		mode: 'onBlur',
 		resolver: yupResolver(validationSchema),
@@ -65,11 +70,16 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 
 	const handleSignUp = async (e, { username, email, password }) => {
 		e.preventDefault();
+		isFormSubmittingRef.current = true;
+
+		console.log('isFormSubmittingRef.current', isFormSubmittingRef.current);
 
 		setTimeout(() => {
 			setSignupError(true);
 			setSignupErrorFeedback('This is a signup error, bagup bagup');
 		}, 5000);
+
+		isFormSubmittingRef.current = false;
 
 		// console.log('User Deets', username, email, password);
 
@@ -92,7 +102,8 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 		errors?.username?.message ||
 		errors?.email?.message ||
 		errors?.password?.message ||
-		errors?.passwordConfirm?.message
+		errors?.passwordConfirm?.message ||
+		isFormSubmittingRef.current == true
 			? 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500 cursor-not-allowed'
 			: 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500';
 
@@ -177,7 +188,8 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 							errors?.username?.message ||
 							errors?.email?.message ||
 							errors?.password?.message ||
-							errors?.passwordConfirm?.message
+							errors?.passwordConfirm?.message ||
+							isFormSubmittingRef.current == true
 						}
 						title={
 							!username ||
@@ -195,7 +207,11 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 							handleSubmit(handleSignUp(e, { username, email, password }))
 						}
 					>
-						SIGN UP
+						{isFormSubmittingRef.current == true ? (
+							<FaSpinner className="animate-spin mr-2" />
+						) : (
+							'SIGN UP'
+						)}
 					</button>
 				</form>
 				<div className="max-w-[333px] flex flex-wrap mt-1 mb-3 relative w-2/3 mobile-width-reset text-custom-white font-semibold">
