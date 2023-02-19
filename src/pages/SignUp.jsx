@@ -32,7 +32,21 @@ const validationSchema = yup.object().shape({
 		.required('Confirm Password is required'),
 });
 
-const SignUp = ({ signUpEmailAndPassword }) => {
+const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
+	const {
+		signupError,
+		signupSuccess,
+		signupErrorFeedback,
+		signupSuccessFeedback,
+	} = readAuthState;
+
+	const {
+		setSignupError,
+		setSignupSuccess,
+		setSignupErrorFeedback,
+		setSignupSuccessFeedback,
+	} = writeAuthState;
+
 	// Import RHF useForm
 	const {
 		register,
@@ -52,15 +66,20 @@ const SignUp = ({ signUpEmailAndPassword }) => {
 	const handleSignUp = async (e, { username, email, password }) => {
 		e.preventDefault();
 
-		console.log('User Deets', username, email, password);
+		setTimeout(() => {
+			setSignupError(true);
+			setSignupErrorFeedback('This is a signup error, bagup bagup');
+		}, 5000);
 
-		const signUpResult = await signUpEmailAndPassword({
-			username,
-			email,
-			password,
-		});
+		// console.log('User Deets', username, email, password);
 
-		console.log('signUpResult', signUpResult);
+		// const signUpResult = await signUpEmailAndPassword({
+		// 	username,
+		// 	email,
+		// 	password,
+		// });
+
+		// console.log('signUpResult', signUpResult);
 
 		// Set state here and redirect on signup success
 	};
@@ -88,21 +107,19 @@ const SignUp = ({ signUpEmailAndPassword }) => {
 						SIGN UP
 					</h2>
 					{/* Alert */}
-					{/* <Dialog
-						feedbackColor={'green'}
-						feedbackHeading={'Success'}
-						feedbackMessage={
-							'Signup successful! Please enter code sent to your email'
-						}
-					/> */}
-					<DialogError
-						feedbackHeading={'Error'}
-						feedbackMessage={'Something went wrong'}
-					/>
-					<DialogSuccess
-						feedbackHeading={'Success'}
-						feedbackMessage={'Everything went as planned'}
-					/>
+					{signupSuccess && (
+						<DialogSuccess
+							feedbackHeading={'Success'}
+							feedbackMessage={signupSuccessFeedback}
+						/>
+					)}
+					{signupError && (
+						<DialogError
+							feedbackHeading={'Error'}
+							feedbackMessage={signupErrorFeedback}
+						/>
+					)}
+
 					{/* Alert */}
 					<div className="flex flex-col text-custom-white py-2">
 						<label>Username</label>

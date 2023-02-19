@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import SignIn from './pages/SignIn.jsx';
@@ -11,7 +11,25 @@ import ConfirmSignUp from './pages/ConfirmSignUp.jsx';
 import { signUpEmailAndPassword } from './auth/authHelpers.js';
 
 function App() {
-	// console.log('firebaseConfig', firebaseConfig);
+	const [signupError, setSignupError] = useState(null);
+	const [signupErrorFeedback, setSignupErrorFeedback] = useState(null);
+
+	const [signupSuccess, setSignupSuccess] = useState(null);
+	const [signupSuccessFeedback, setSignupSuccessFeedback] = useState(null);
+
+	const readAuthState = {
+		signupError,
+		signupSuccess,
+		signupErrorFeedback,
+		signupSuccessFeedback,
+	};
+
+	const writeAuthState = {
+		setSignupError,
+		setSignupSuccess,
+		setSignupErrorFeedback,
+		setSignupSuccessFeedback,
+	};
 
 	return (
 		<BrowserRouter>
@@ -19,7 +37,13 @@ function App() {
 				<Route path={'/auth/signin'} element={<SignIn />} />
 				<Route
 					path={'/auth/signup'}
-					element={<SignUp signUpEmailAndPassword={signUpEmailAndPassword} />}
+					element={
+						<SignUp
+							signUpEmailAndPassword={signUpEmailAndPassword}
+							readAuthState={readAuthState}
+							writeAuthState={writeAuthState}
+						/>
+					}
 				/>
 				<Route path={'/auth/confirm-signup'} element={<ConfirmSignUp />} />
 				<Route path={'/auth/forgot-password'} element={<ForgotPassword />} />

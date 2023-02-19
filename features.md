@@ -37,11 +37,15 @@ Additionaly, when all needed methods are implemented convert service to a cloud 
 - 1.0.1. Sends the user an action code (This function can be used for Signup => Confirm Signup, Forgot Password => Forgot Password Confirm or Code confirm to delete sensitive content)
 - 1.0.2. Verifies the action code
 
-1.1 Implement email service logic into signup 
-- When user signs up send code 
-- If code validated and returns true then set email to verified in DB
+1.1 Implement email service logic into signup Complete 19/02
+- When user signs up send code Complete 19/02
 
-1.2 When adding firebase auth logic implement isSubmitting from RHF. If isSubmitting true then loader in btn else none. Same goes for other forms 
+1.2 When adding firebase auth logic 
+- implement isSubmitting from RHF. If isSubmitting true then loader in btn else none. Same goes for other forms 
+- Show success error alerts 
+- On success redirect to Signup confirm 
+- On Error then show signup error message 
+- If code validated and returns true then set email to verified in DB
 
 1.3 Consider what user attributes will be useful right from the start 
 - Build alert component 
