@@ -207,11 +207,14 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 							handleSubmit(handleSignUp(e, { username, email, password }))
 						}
 					>
-						{isFormSubmittingRef.current == true ? (
+						{/* {isFormSubmittingRef.current == true ? (
 							<FaSpinner className="animate-spin mr-2" />
 						) : (
 							'SIGN UP'
-						)}
+						)} */}
+						<div className="w-full flex justify-center my-1">
+							<FaSpinner className="animate-spin mr-2" />
+						</div>
 					</button>
 				</form>
 				<div className="max-w-[333px] flex flex-wrap mt-1 mb-3 relative w-2/3 mobile-width-reset text-custom-white font-semibold">
