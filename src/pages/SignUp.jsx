@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
@@ -6,7 +7,6 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import DialogError from '../components/Alerts/DialogError';
-import DialogSuccess from '../components/Alerts/DialogSuccess';
 
 import { FaSpinner } from 'react-icons/fa';
 
@@ -36,6 +36,8 @@ const validationSchema = yup.object().shape({
 });
 
 const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
+	const navigate = useNavigate();
+
 	const {
 		signupError,
 		signupSuccess,
@@ -51,6 +53,7 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 	} = writeAuthState;
 
 	const isFormSubmittingRef = useRef(null);
+	const [isFormSubmitting, setIsFormSubmitting] = useState(null);
 
 	// Import RHF useForm
 	const {
@@ -68,30 +71,38 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 	const password = watch('password');
 	const passwordConfirm = watch('passwordConfirm');
 
-	const handleSignUp = async (e, { username, email, password }) => {
-		e.preventDefault();
-		isFormSubmittingRef.current = true;
+	const onSubmit = async ({ username, email, password }) => {
+		try {
+			setIsFormSubmitting(true);
+			const submitResult = await signUpEmailAndPassword({
+				username,
+				email,
+				password,
+			});
 
-		console.log('isFormSubmittingRef.current', isFormSubmittingRef.current);
+			if (submitResult.error) {
+				setSignupError(true);
+				setSignupErrorFeedback(submitResult.error);
+				setSignupSuccess(null);
+				setSignupSuccessFeedback(null);
+				setIsFormSubmitting(false);
+				return;
+			}
 
-		setTimeout(() => {
+			setSignupSuccess(true);
+			setSignupSuccessFeedback(submitResult.data);
+			setSignupError(null);
+			setSignupErrorFeedback(null);
+			setIsFormSubmitting(false);
+
+			navigate('/auth/signup-confirm');
+			return;
+		} catch (error) {
 			setSignupError(true);
-			setSignupErrorFeedback('This is a signup error, bagup bagup');
-		}, 5000);
-
-		isFormSubmittingRef.current = false;
-
-		// console.log('User Deets', username, email, password);
-
-		// const signUpResult = await signUpEmailAndPassword({
-		// 	username,
-		// 	email,
-		// 	password,
-		// });
-
-		// console.log('signUpResult', signUpResult);
-
-		// Set state here and redirect on signup success
+			setSignupErrorFeedback(error.message);
+			setIsFormSubmitting(false);
+			return;
+		}
 	};
 
 	const disabledBtnClasses =
@@ -103,7 +114,7 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 		errors?.email?.message ||
 		errors?.password?.message ||
 		errors?.passwordConfirm?.message ||
-		isFormSubmittingRef.current == true
+		isFormSubmitting
 			? 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500 cursor-not-allowed'
 			: 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500';
 
@@ -118,12 +129,6 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 						SIGN UP
 					</h2>
 					{/* Alert */}
-					{signupSuccess && (
-						<DialogSuccess
-							feedbackHeading={'Success'}
-							feedbackMessage={signupSuccessFeedback}
-						/>
-					)}
 					{signupError && (
 						<DialogError
 							feedbackHeading={'Error'}
@@ -189,7 +194,7 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 							errors?.email?.message ||
 							errors?.password?.message ||
 							errors?.passwordConfirm?.message ||
-							isFormSubmittingRef.current == true
+							isFormSubmitting
 						}
 						title={
 							!username ||
@@ -203,18 +208,15 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 								? 'Please complete the required fields to enable'
 								: 'Sign Up'
 						}
-						onClick={(e) =>
-							handleSubmit(handleSignUp(e, { username, email, password }))
-						}
+						onClick={handleSubmit(onSubmit)}
 					>
-						{/* {isFormSubmittingRef.current == true ? (
-							<FaSpinner className="animate-spin mr-2" />
+						{isFormSubmitting ? (
+							<div className="w-full flex justify-center my-1">
+								<FaSpinner className="animate-spin mr-2" />
+							</div>
 						) : (
 							'SIGN UP'
-						)} */}
-						<div className="w-full flex justify-center my-1">
-							<FaSpinner className="animate-spin mr-2" />
-						</div>
+						)}
 					</button>
 				</form>
 				<div className="max-w-[333px] flex flex-wrap mt-1 mb-3 relative w-2/3 mobile-width-reset text-custom-white font-semibold">

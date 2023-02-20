@@ -5,6 +5,8 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import DialogSuccess from '../components/Alerts/DialogSuccess';
+
 const validationSchema = yup.object().shape({
 	code: yup
 		.string()
@@ -12,8 +14,21 @@ const validationSchema = yup.object().shape({
 		.required('Code is a required field'),
 });
 
-const ConfirmSignUp = () => {
-	// Import RHF useForm
+const ConfirmSignUp = ({ readAuthState, writeAuthState }) => {
+	const {
+		signupError,
+		signupSuccess,
+		signupErrorFeedback,
+		signupSuccessFeedback,
+	} = readAuthState;
+
+	const {
+		setSignupError,
+		setSignupSuccess,
+		setSignupErrorFeedback,
+		setSignupSuccessFeedback,
+	} = writeAuthState;
+
 	const {
 		register,
 		handleSubmit,
@@ -40,6 +55,14 @@ const ConfirmSignUp = () => {
 					<h2 className="text-3xl text-custom-white font-bold text-center">
 						CONFIRM SIGN UP
 					</h2>
+
+					{signupSuccess && (
+						<DialogSuccess
+							feedbackHeading={'Success'}
+							feedbackMessage={signupSuccessFeedback}
+						/>
+					)}
+
 					<div className="flex flex-col text-custom-white py-2">
 						<label>Code</label>
 						<input

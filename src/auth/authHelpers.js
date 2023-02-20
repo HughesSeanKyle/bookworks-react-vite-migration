@@ -73,9 +73,11 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 			};
 		}
 
-		console.log('Sign up successful! Verification email sent.');
+		console.log(
+			'Sign up successful! Verification email sent. Please enter the code below to verify your email'
+		);
 		return {
-			data: 'Sign up successful! Verification email sent.',
+			data: 'Sign up successful! Verification email sent. Please enter the code below to verify your email',
 			error: null,
 		};
 	} catch (error) {

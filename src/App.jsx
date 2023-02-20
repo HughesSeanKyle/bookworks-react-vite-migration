@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 
 import SignIn from './pages/SignIn.jsx';
 import SignUp from './pages/SignUp.jsx';
@@ -31,6 +31,8 @@ function App() {
 		setSignupSuccessFeedback,
 	};
 
+	console.log('readAuthState', readAuthState);
+
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -45,7 +47,15 @@ function App() {
 						/>
 					}
 				/>
-				<Route path={'/auth/confirm-signup'} element={<ConfirmSignUp />} />
+				<Route
+					path={'/auth/signup-confirm'}
+					element={
+						<ConfirmSignUp
+							readAuthState={readAuthState}
+							writeAuthState={writeAuthState}
+						/>
+					}
+				/>
 				<Route path={'/auth/forgot-password'} element={<ForgotPassword />} />
 				<Route
 					path={'/auth/forgot-password-confirm'}
