@@ -15,12 +15,7 @@ const validationSchema = yup.object().shape({
 });
 
 const ConfirmSignUp = ({ readAuthState, writeAuthState }) => {
-	const {
-		signupError,
-		signupSuccess,
-		signupErrorFeedback,
-		signupSuccessFeedback,
-	} = readAuthState;
+	const { signupSuccess, signupSuccessFeedback } = readAuthState;
 
 	const {
 		setSignupError,

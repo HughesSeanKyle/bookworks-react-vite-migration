@@ -36,7 +36,7 @@ Additionaly, when all needed methods are implemented convert service to a cloud 
 
 1. Logic for sign up
 1.0 NEW => Service for action verification has been built and deployed. Service does two things: 
-- 1.0.1. Sends the user an action code (This function can be used for Signup => Confirm Signup, Forgot Password => Forgot Password Confirm or Code confirm to delete sensitive content)
+- 1.0.1. Sends the user an action code (This function can be used for Signup => Confirm Signup, Forgot Password => Forgot Password Confirm or Code confirm to delete sensitive content) Complete 20/02
 - 1.0.2. Verifies the action code
 
 1.1 Implement email service logic into signup Complete 19/02
