@@ -15,6 +15,7 @@ The goal of this web application is to build a web application where a user can 
 3. SignIn Form (Page) Completed 01/02
 4. Forgot Password (Page) Completed 01/02
 5. Forgot Password Confirm (page) Completed 09/02
+- 02/02 - 02/08 => Email Service
 
 ### Feature 2 - Form validation (Continue here 02/02)
 1. Validation sign up Completed 02/02
@@ -22,6 +23,7 @@ The goal of this web application is to build a web application where a user can 
 3. Validation sign in Completed 02/02
 4. Validation forgot password Completed 02/02
 5. Validation Forgot Password Confirm (page) Completed 09/02
+- 02/02 - 02/08 => Email Service
 
 ### Feature 3 - Implement Firebase Authentication logic (&& Federated Signin)
 0. IMPORTANT - Would be best to set firebase auth methods up on the server side to offer an additional layer of security. When setting auth methods directly on the client side the web app is exposed to security vulnerabilties such as man-in-the-middle attacks. This ensures that sensitive information such as passwords and tokens are not transmitted directly from the client to the authentication service.
@@ -37,16 +39,24 @@ Additionaly, when all needed methods are implemented convert service to a cloud 
 - 1.0.1. Sends the user an action code (This function can be used for Signup => Confirm Signup, Forgot Password => Forgot Password Confirm or Code confirm to delete sensitive content)
 - 1.0.2. Verifies the action code
 
-1.1 Implement email service logic into signup 
-- When user signs up send code 
-- If code validated and returns true then set email to verified in DB
+1.1 Implement email service logic into signup Complete 19/02
+- When user signs up send code Complete 19/02
 
-1.2 When adding firebase auth logic implement isSubmitting from RHF. If isSubmitting true then loader in btn else none. Same goes for other forms 
+1.2 When adding firebase auth logic 
+- implement isSubmitting from RHF. If isSubmitting true then loader in btn else none. Same goes for other forms 
+- Show success error alerts. Show signup success on confirm signup Complete 20/02/
+- On success redirect to Signup confirm  20/02
+- On Error then show signup error message 20/02
+- Ensure that the confirm signup page can only be reached through Signup redirect flow
+- If code validated and returns true then set user email to verified in DB
 
 1.3 Consider what user attributes will be useful right from the start 
 - Build alert component 
 - Use onAuthStateChanged to check emailVerified prop. If false, show alert and ask to resend email? Block certain features of app if not verified. e.g no uploads... 
 - Implement resend verification email functionality. 
+
+NOTES RE SIGNUP
+- Firebase already hashes the password upon Signup. So no need for brypt and no need to store hashed password in DB 17/02
 
 2. Logic for confirm sign up
 This route can only be accessed via Signup as step 1 of the flow

@@ -17,8 +17,6 @@ import {
 	query,
 	where,
 } from 'firebase/firestore';
-// import dotenv from 'dotenv';
-// import bcrypt from 'bcrypt';
 
 import keys from '../keys.js';
 
@@ -46,10 +44,6 @@ const db = getFirestore(app);
 // Sign Up
 
 export const signUpEmailAndPassword = async ({ email, password, username }) => {
-	const saltRounds = 10;
-
-	// const encryptedPassword = await bcrypt.hash(password, saltRounds);
-
 	try {
 		// Create a user with email and password
 		const response = await createUserWithEmailAndPassword(
@@ -62,7 +56,6 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 
 		await setDoc(doc(db, 'users', user.uid), {
 			email: user.email,
-			password: encryptedPassword,
 			username: username,
 			userID: user.uid,
 			emailVerified: false,
@@ -80,9 +73,11 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 			};
 		}
 
-		console.log('Sign up successful! Verification email sent.');
+		console.log(
+			'Sign up successful! Verification email sent. Please enter the code below to verify your email'
+		);
 		return {
-			data: 'Sign up successful! Verification email sent.',
+			data: 'Sign up successful! Verification email sent. Please enter the code below to verify your email',
 			error: null,
 		};
 	} catch (error) {
@@ -94,15 +89,15 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 	}
 };
 
-const userData = {
-	email: 'khughessean001@yahoo.com',
-	password: '@Test12345',
-	username: 'testingFromFile_2',
-};
+// const userData = {
+// 	email: 'khughessean001@yahoo.com',
+// 	password: '@Test12345',
+// 	username: 'testingFromFile_2',
+// };
 
-(async () => {
-	await signUpEmailAndPassword(userData);
-})();
+// (async () => {
+// 	await signUpEmailAndPassword(userData);
+// })();
 
 // Get user by email
 async function fetchUserProfileByEmail(email) {

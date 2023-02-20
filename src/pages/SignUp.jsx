@@ -1,8 +1,14 @@
+import { useNavigate } from 'react-router-dom';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import DialogError from '../components/Alerts/DialogError';
+
+import { FaSpinner } from 'react-icons/fa';
 
 const validationSchema = yup.object().shape({
 	username: yup
@@ -29,13 +35,32 @@ const validationSchema = yup.object().shape({
 		.required('Confirm Password is required'),
 });
 
-const SignUp = () => {
+const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
+	const navigate = useNavigate();
+
+	const {
+		signupError,
+		signupSuccess,
+		signupErrorFeedback,
+		signupSuccessFeedback,
+	} = readAuthState;
+
+	const {
+		setSignupError,
+		setSignupSuccess,
+		setSignupErrorFeedback,
+		setSignupSuccessFeedback,
+	} = writeAuthState;
+
+	const isFormSubmittingRef = useRef(null);
+	const [isFormSubmitting, setIsFormSubmitting] = useState(null);
+
 	// Import RHF useForm
 	const {
 		register,
 		handleSubmit,
 		watch,
-		formState: { errors, isSubmitting },
+		formState: { errors },
 	} = useForm({
 		mode: 'onBlur',
 		resolver: yupResolver(validationSchema),
@@ -46,6 +71,40 @@ const SignUp = () => {
 	const password = watch('password');
 	const passwordConfirm = watch('passwordConfirm');
 
+	const onSubmit = async ({ username, email, password }) => {
+		try {
+			setIsFormSubmitting(true);
+			const submitResult = await signUpEmailAndPassword({
+				username,
+				email,
+				password,
+			});
+
+			if (submitResult.error) {
+				setSignupError(true);
+				setSignupErrorFeedback(submitResult.error);
+				setSignupSuccess(null);
+				setSignupSuccessFeedback(null);
+				setIsFormSubmitting(false);
+				return;
+			}
+
+			setSignupSuccess(true);
+			setSignupSuccessFeedback(submitResult.data);
+			setSignupError(null);
+			setSignupErrorFeedback(null);
+			setIsFormSubmitting(false);
+
+			navigate('/auth/signup-confirm');
+			return;
+		} catch (error) {
+			setSignupError(true);
+			setSignupErrorFeedback(error.message);
+			setIsFormSubmitting(false);
+			return;
+		}
+	};
+
 	const disabledBtnClasses =
 		!username ||
 		!email ||
@@ -54,7 +113,8 @@ const SignUp = () => {
 		errors?.username?.message ||
 		errors?.email?.message ||
 		errors?.password?.message ||
-		errors?.passwordConfirm?.message
+		errors?.passwordConfirm?.message ||
+		isFormSubmitting
 			? 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500 cursor-not-allowed'
 			: 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500';
 
@@ -68,6 +128,15 @@ const SignUp = () => {
 					<h2 className="text-4xl text-custom-white font-bold text-center">
 						SIGN UP
 					</h2>
+					{/* Alert */}
+					{signupError && (
+						<DialogError
+							feedbackHeading={'Error'}
+							feedbackMessage={signupErrorFeedback}
+						/>
+					)}
+
+					{/* Alert */}
 					<div className="flex flex-col text-custom-white py-2">
 						<label>Username</label>
 						<input
@@ -124,7 +193,8 @@ const SignUp = () => {
 							errors?.username?.message ||
 							errors?.email?.message ||
 							errors?.password?.message ||
-							errors?.passwordConfirm?.message
+							errors?.passwordConfirm?.message ||
+							isFormSubmitting
 						}
 						title={
 							!username ||
@@ -138,8 +208,15 @@ const SignUp = () => {
 								? 'Please complete the required fields to enable'
 								: 'Sign Up'
 						}
+						onClick={handleSubmit(onSubmit)}
 					>
-						SIGN UP
+						{isFormSubmitting ? (
+							<div className="w-full flex justify-center my-1">
+								<FaSpinner className="animate-spin mr-2" />
+							</div>
+						) : (
+							'SIGN UP'
+						)}
 					</button>
 				</form>
 				<div className="max-w-[333px] flex flex-wrap mt-1 mb-3 relative w-2/3 mobile-width-reset text-custom-white font-semibold">
