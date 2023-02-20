@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 import SignIn from './pages/SignIn.jsx';
@@ -9,6 +9,7 @@ import ConfirmSignUp from './pages/ConfirmSignUp.jsx';
 
 // Import all auth functions here and pass down as prop instead
 import { signUpEmailAndPassword } from './auth/authHelpers.js';
+import { verifyUserEmail } from './auth/authHelpers.js';
 
 function App() {
 	const [signupError, setSignupError] = useState(null);
@@ -32,6 +33,14 @@ function App() {
 	};
 
 	console.log('readAuthState', readAuthState);
+
+	useEffect(() => {
+		(async () => {
+			let result = await verifyUserEmail('khughessean@yahoo.com');
+
+			console.log('result', result);
+		})();
+	}, []);
 
 	return (
 		<BrowserRouter>

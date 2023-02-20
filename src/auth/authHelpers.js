@@ -20,7 +20,7 @@ import {
 
 import keys from '../keys.js';
 
-import { sendVerificationCode } from '../api/emailService.js';
+import { sendVerificationCode, verifyEmailCode } from '../api/emailService.js';
 
 const isDevMode = import.meta.env.MODE === 'development' ? true : false;
 
@@ -89,15 +89,30 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 	}
 };
 
-// const userData = {
-// 	email: 'khughessean001@yahoo.com',
-// 	password: '@Test12345',
-// 	username: 'testingFromFile_2',
-// };
-
-// (async () => {
-// 	await signUpEmailAndPassword(userData);
-// })();
+export async function verifyUserEmail(email) {
+	try {
+		const userQuerySnapshot = await getDocs(
+			query(collection(db, 'users'), where('email', '==', email))
+		);
+		if (userQuerySnapshot.empty) {
+			return {
+				data: null,
+				error: `No such user with email: ${email}`,
+			};
+		} else {
+			const userDoc = userQuerySnapshot.docs[0];
+			const userRef = doc(db, 'users', userDoc.id);
+			await updateDoc(userRef, { emailVerified: true });
+			const userSnap = await getDoc(userRef);
+			return { data: userSnap.data(), error: null };
+		}
+	} catch (error) {
+		return {
+			data: null,
+			error: error.message,
+		};
+	}
+}
 
 // Get user by email
 async function fetchUserProfileByEmail(email) {

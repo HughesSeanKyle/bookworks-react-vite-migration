@@ -45,22 +45,18 @@ Additionaly, when all needed methods are implemented convert service to a cloud 
 1.2 When adding firebase auth logic 
 - implement isSubmitting from RHF. If isSubmitting true then loader in btn else none. Same goes for other forms 
 - Show success error alerts. Show signup success on confirm signup Complete 20/02/
-- On success redirect to Signup confirm  20/02
 - On Error then show signup error message 20/02
-- Ensure that the confirm signup page can only be reached through Signup redirect flow
-- If code validated and returns true then set user email to verified in DB
+- On success redirect to Signup confirm  20/02
 
-1.3 Consider what user attributes will be useful right from the start 
-- Build alert component 
-- Use onAuthStateChanged to check emailVerified prop. If false, show alert and ask to resend email? Block certain features of app if not verified. e.g no uploads... 
-- Implement resend verification email functionality. 
 
 NOTES RE SIGNUP
 - Firebase already hashes the password upon Signup. So no need for brypt and no need to store hashed password in DB 17/02
 
 2. Logic for confirm sign up
-This route can only be accessed via Signup as step 1 of the flow
-- Return to this logic later when sendGrid or mailing service set up.
+- Ensure that the confirm signup page can only be reached through Signup redirect flow Complete 20/02
+- If code validated and returns true then set user email to verified in DB. Create logic that will await verifiyEmailCode resp and if true then verify email and false show error. 
+- If success on validation and email verifified then redirect to Signin and show email verification success.  
+- Be sure to set setSignupSuccess && setSignupSuccessFeedback back to null in code confirm logic
 
 3. Logic for signin 
 4. Logic for signout
@@ -78,9 +74,10 @@ This section should have a two part flow. 1. The email is added to the input, 2.
 
 ### Feature 4 - User authentication alerts 
 0. NOTE: When implementing alerts here, try to incorporate the useTrasition hook to animate the mounting and unmounting of the alert. See if a lib like animate.js can be used. 
-1. Alerts sign up
+1. Alerts sign up Complete 20/02
 2. Alerts confirm sign up
 3. Alerts sign in
+- REMOVE bcrypt LOGIC FROM HERE => PASSWORDS ALREADY HASHED VIA FIREBASE
 4. Alerts sign out
 5. Alerts forgot password
 5. Alerts forgot password confirm
@@ -88,6 +85,13 @@ This section should have a two part flow. 1. The email is added to the input, 2.
 
 ### Feature 5 - Book application 
 1. Protect route if no JWT
+
+Auth checks when redirected to Admin
+
+1.1 Consider what user attributes will be useful right from the start 
+- Build alert component 
+- Use onAuthStateChanged to check emailVerified prop. If false, show alert and ask to resend email? Block certain features of app if not verified. e.g no uploads... 
+- Implement resend verification email functionality.
 2. When clicking a Book from the grid a sidebar open from the right to left showing all book information. (See Design) 
 3. Further features to be defined later
 4. Incorporate with firebase storage mechanisms => (CRUD)
