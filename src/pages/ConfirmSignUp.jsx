@@ -40,7 +40,14 @@ const ConfirmSignUp = ({
 		signupConfirmErrorFeedback,
 	} = readAuthState;
 
-	const { setSignupSuccess, setSignupSuccessFeedback } = writeAuthState;
+	const {
+		setSignupSuccess,
+		setSignupSuccessFeedback,
+		setSignupConfirmError,
+		setSignupConfirmErrorFeedback,
+		setSignupConfirmSuccess,
+		setSignupConfirmSuccessFeedback,
+	} = writeAuthState;
 
 	const [isFormSubmitting, setIsFormSubmitting] = useState(null);
 
@@ -57,34 +64,37 @@ const ConfirmSignUp = ({
 	const code = watch('code');
 	const signupEmail = watch('signupEmail');
 
-	const onSubmit = async ({ code }) => {
+	const onSubmit = async ({ signupEmail, code }) => {
 		try {
 			setIsFormSubmitting(true);
-			const submitResult = await verifyAndUpdateUserEmail({
-				signupEmail,
-				code,
-			});
+			const submitResult = await verifyAndUpdateUserEmail(signupEmail, code);
 
 			if (submitResult.error) {
-				setSignupError(true);
-				setSignupErrorFeedback(submitResult.error);
+				setSignupConfirmError(true);
+				setSignupConfirmErrorFeedback(submitResult.error);
+				setSignupConfirmSuccess(null);
+				setSignupConfirmSuccessFeedback(null);
 				setSignupSuccess(null);
 				setSignupSuccessFeedback(null);
 				setIsFormSubmitting(false);
 				return;
 			}
 
-			setSignupSuccess(true);
-			setSignupSuccessFeedback(submitResult.data);
-			setSignupError(null);
-			setSignupErrorFeedback(null);
+			setSignupConfirmSuccess(true);
+			setSignupConfirmSuccessFeedback(submitResult.data);
+			setSignupConfirmError(null);
+			setSignupConfirmErrorFeedback(null);
 			setIsFormSubmitting(false);
 
-			navigate('/auth/signup-confirm');
+			navigate('/auth/signin');
 			return;
 		} catch (error) {
-			setSignupError(true);
-			setSignupErrorFeedback(error.message);
+			setSignupConfirmError(true);
+			setSignupConfirmErrorFeedback(error.message);
+			setSignupConfirmSuccess(null);
+			setSignupConfirmSuccessFeedback(null);
+			setSignupSuccess(null);
+			setSignupSuccessFeedback(null);
 			setIsFormSubmitting(false);
 			return;
 		}
@@ -113,7 +123,12 @@ const ConfirmSignUp = ({
 						/>
 					)}
 
-					{/* Error dialog here */}
+					{signupConfirmError && (
+						<DialogError
+							feedbackHeading={'Error'}
+							feedbackMessage={signupConfirmErrorFeedback}
+						/>
+					)}
 
 					<div className="flex flex-col text-custom-white py-2">
 						<label>Email</label>
@@ -154,8 +169,15 @@ const ConfirmSignUp = ({
 								? 'Please complete the required fields to enable'
 								: 'Submit'
 						}
+						onClick={handleSubmit(onSubmit)}
 					>
-						SUBMIT
+						{isFormSubmitting ? (
+							<div className="w-full flex justify-center my-1">
+								<FaSpinner className="animate-spin mr-2" />
+							</div>
+						) : (
+							'SUBMIT'
+						)}
 					</button>
 				</form>
 				<div className="max-w-[333px] flex flex-wrap mt-1 mb-3 relative w-2/3 mobile-width-reset text-custom-white font-semibold">

@@ -18,7 +18,6 @@ function App() {
 	const [signupErrorFeedback, setSignupErrorFeedback] = useState(null);
 	const [signupSuccess, setSignupSuccess] = useState(null);
 	const [signupSuccessFeedback, setSignupSuccessFeedback] = useState(null);
-	const [signupEmail, setSignupEmail] = useState(null);
 
 	const [signupConfirmError, setSignupConfirmError] = useState(null);
 	const [signupConfirmErrorFeedback, setSignupConfirmErrorFeedback] =
@@ -36,7 +35,6 @@ function App() {
 		signupConfirmErrorFeedback,
 		signupConfirmSuccess,
 		signupConfirmSuccessFeedback,
-		signupEmail,
 	};
 
 	const writeAuthState = {
@@ -48,7 +46,6 @@ function App() {
 		setSignupConfirmErrorFeedback,
 		setSignupConfirmSuccess,
 		setSignupConfirmSuccessFeedback,
-		setSignupEmail,
 	};
 
 	console.log('readAuthState', readAuthState);
@@ -77,12 +74,12 @@ function App() {
 								verifyAndUpdateUserEmail={verifyAndUpdateUserEmail}
 							/>
 						) : (
+							// <Navigate to="/auth/signin" />
 							<ConfirmSignUp
 								readAuthState={readAuthState}
 								writeAuthState={writeAuthState}
 								verifyAndUpdateUserEmail={verifyAndUpdateUserEmail}
 							/>
-							// <Navigate to="/auth/signin" />
 						)
 					}
 				/>
