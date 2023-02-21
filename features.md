@@ -16,6 +16,11 @@ The goal of this web application is to build a web application where a user can 
 4. Forgot Password (Page) Completed 01/02
 5. Forgot Password Confirm (page) Completed 09/02
 - 02/02 - 02/08 => Email Service
+6. Rensend verification email component 
+6.1 Will have two inputs 
+- 6.1.1 An input for email 
+- 6.1.2 An input for the code 
+- 6.1.3 Check if the users email has been verified. If true, then create warning/attention (Orange) dialog box advising email has already been verified and user can log in.  
 
 ### Feature 2 - Form validation (Continue here 02/02)
 1. Validation sign up Completed 02/02
@@ -48,12 +53,13 @@ Additionaly, when all needed methods are implemented convert service to a cloud 
 - On Error then show signup error message 20/02
 - On success redirect to Signup confirm  20/02
 
-
 NOTES RE SIGNUP
 - Firebase already hashes the password upon Signup. So no need for brypt and no need to store hashed password in DB 17/02
 
 2. Logic for confirm sign up
+
 - Ensure that the confirm signup page can only be reached through Signup redirect flow Complete 20/02
+- Create a signupEmail input for this component with validation. 
 - If code validated and returns true then set user email to verified in DB. Create logic that will await verifiyEmailCode resp and if true then verify email and false show error. 
 - If success on validation and email verifified then redirect to Signin and show email verification success.  
 - Be sure to set setSignupSuccess && setSignupSuccessFeedback back to null in code confirm logic
@@ -72,6 +78,7 @@ This section should have a two part flow. 1. The email is added to the input, 2.
 - See 5 above. 
 
 
+
 ### Feature 4 - User authentication alerts 
 0. NOTE: When implementing alerts here, try to incorporate the useTrasition hook to animate the mounting and unmounting of the alert. See if a lib like animate.js can be used. 
 1. Alerts sign up Complete 20/02
@@ -84,6 +91,7 @@ This section should have a two part flow. 1. The email is added to the input, 2.
 6. Keep track if route is admin or auth
 
 ### Feature 5 - Book application 
+0. When the user did not verify, there should be an annoying alert box reinding them they did not verify their email and certian functionality will be restricted. They can then opt to resend the the code, which will redirect them to a confirm screen on an admin route. They can then verify from there 
 1. Protect route if no JWT
 
 Auth checks when redirected to Admin

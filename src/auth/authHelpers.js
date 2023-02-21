@@ -89,7 +89,7 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 	}
 };
 
-export async function verifyUserEmail(email) {
+export async function updateUserEmail(email) {
 	try {
 		const userQuerySnapshot = await getDocs(
 			query(collection(db, 'users'), where('email', '==', email))
@@ -106,6 +106,29 @@ export async function verifyUserEmail(email) {
 			const userSnap = await getDoc(userRef);
 			return { data: userSnap.data(), error: null };
 		}
+	} catch (error) {
+		return {
+			data: null,
+			error: error.message,
+		};
+	}
+}
+
+export async function verifyAndUpdateUserEmail(email, code) {
+	try {
+		const verificationResult = await verifyEmailCode(email, code);
+
+		if (verificationResult.error) {
+			return { data: null, error: verificationResult.error };
+		}
+
+		const updateUserEmailResult = await updateUserEmail(email);
+
+		if (updateUserEmailResult.error) {
+			return { data: null, error: updateUserEmailResult.error };
+		}
+
+		return { data: verificationResult.data, error: null };
 	} catch (error) {
 		return {
 			data: null,

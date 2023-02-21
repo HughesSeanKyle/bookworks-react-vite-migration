@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
 import { useForm } from 'react-hook-form';
@@ -38,21 +38,16 @@ const validationSchema = yup.object().shape({
 const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 	const navigate = useNavigate();
 
-	const {
-		signupError,
-		signupSuccess,
-		signupErrorFeedback,
-		signupSuccessFeedback,
-	} = readAuthState;
+	const { signupError, signupErrorFeedback } = readAuthState;
 
 	const {
 		setSignupError,
 		setSignupSuccess,
 		setSignupErrorFeedback,
 		setSignupSuccessFeedback,
+		setSignupEmail,
 	} = writeAuthState;
 
-	const isFormSubmittingRef = useRef(null);
 	const [isFormSubmitting, setIsFormSubmitting] = useState(null);
 
 	// Import RHF useForm
@@ -94,6 +89,7 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 			setSignupError(null);
 			setSignupErrorFeedback(null);
 			setIsFormSubmitting(false);
+			setSignupEmail(email);
 
 			navigate('/auth/signup-confirm');
 			return;

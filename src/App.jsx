@@ -8,21 +8,35 @@ import ForgotPasswordConfirm from './pages/ForgotPasswordConfirm.jsx';
 import ConfirmSignUp from './pages/ConfirmSignUp.jsx';
 
 // Import all auth functions here and pass down as prop instead
-import { signUpEmailAndPassword } from './auth/authHelpers.js';
-import { verifyUserEmail } from './auth/authHelpers.js';
+import {
+	signUpEmailAndPassword,
+	verifyAndUpdateUserEmail,
+} from './auth/authHelpers.js';
 
 function App() {
 	const [signupError, setSignupError] = useState(null);
 	const [signupErrorFeedback, setSignupErrorFeedback] = useState(null);
-
 	const [signupSuccess, setSignupSuccess] = useState(null);
 	const [signupSuccessFeedback, setSignupSuccessFeedback] = useState(null);
+	const [signupEmail, setSignupEmail] = useState(null);
+
+	const [signupConfirmError, setSignupConfirmError] = useState(null);
+	const [signupConfirmErrorFeedback, setSignupConfirmErrorFeedback] =
+		useState(null);
+	const [signupConfirmSuccess, setSignupConfirmSuccess] = useState(null);
+	const [signupConfirmSuccessFeedback, setSignupConfirmSuccessFeedback] =
+		useState(null);
 
 	const readAuthState = {
 		signupError,
 		signupSuccess,
 		signupErrorFeedback,
 		signupSuccessFeedback,
+		signupConfirmError,
+		signupConfirmErrorFeedback,
+		signupConfirmSuccess,
+		signupConfirmSuccessFeedback,
+		signupEmail,
 	};
 
 	const writeAuthState = {
@@ -30,17 +44,14 @@ function App() {
 		setSignupSuccess,
 		setSignupErrorFeedback,
 		setSignupSuccessFeedback,
+		setSignupConfirmError,
+		setSignupConfirmErrorFeedback,
+		setSignupConfirmSuccess,
+		setSignupConfirmSuccessFeedback,
+		setSignupEmail,
 	};
 
 	console.log('readAuthState', readAuthState);
-
-	useEffect(() => {
-		(async () => {
-			let result = await verifyUserEmail('khughessean@yahoo.com');
-
-			console.log('result', result);
-		})();
-	}, []);
 
 	return (
 		<BrowserRouter>
@@ -63,9 +74,15 @@ function App() {
 							<ConfirmSignUp
 								readAuthState={readAuthState}
 								writeAuthState={writeAuthState}
+								verifyAndUpdateUserEmail={verifyAndUpdateUserEmail}
 							/>
 						) : (
-							<Navigate to="/auth/signin" />
+							<ConfirmSignUp
+								readAuthState={readAuthState}
+								writeAuthState={writeAuthState}
+								verifyAndUpdateUserEmail={verifyAndUpdateUserEmail}
+							/>
+							// <Navigate to="/auth/signin" />
 						)
 					}
 				/>
