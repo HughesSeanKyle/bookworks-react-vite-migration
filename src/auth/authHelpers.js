@@ -20,7 +20,7 @@ import {
 
 import keys from '../keys.js';
 
-import { sendVerificationCode } from '../api/emailService.js';
+import { sendVerificationCode, verifyEmailCode } from '../api/emailService.js';
 
 const isDevMode = import.meta.env.MODE === 'development' ? true : false;
 
@@ -89,15 +89,53 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 	}
 };
 
-// const userData = {
-// 	email: 'khughessean001@yahoo.com',
-// 	password: '@Test12345',
-// 	username: 'testingFromFile_2',
-// };
+async function updateUserEmail(email) {
+	try {
+		const userQuerySnapshot = await getDocs(
+			query(collection(db, 'users'), where('email', '==', email))
+		);
+		if (userQuerySnapshot.empty) {
+			return {
+				data: null,
+				error: `No such user with email: ${email}`,
+			};
+		} else {
+			const userDoc = userQuerySnapshot.docs[0];
+			const userRef = doc(db, 'users', userDoc.id);
+			await updateDoc(userRef, { emailVerified: true });
+			const userSnap = await getDoc(userRef);
+			return { data: userSnap.data(), error: null };
+		}
+	} catch (error) {
+		return {
+			data: null,
+			error: error.message,
+		};
+	}
+}
 
-// (async () => {
-// 	await signUpEmailAndPassword(userData);
-// })();
+export async function verifyAndUpdateUserEmail(email, code) {
+	try {
+		const verificationResult = await verifyEmailCode(email, code);
+
+		if (verificationResult.error) {
+			return { data: null, error: verificationResult.error };
+		}
+
+		const updateUserEmailResult = await updateUserEmail(email);
+
+		if (updateUserEmailResult.error) {
+			return { data: null, error: updateUserEmailResult.error };
+		}
+
+		return { data: verificationResult.data, error: null };
+	} catch (error) {
+		return {
+			data: null,
+			error: error.message,
+		};
+	}
+}
 
 // Get user by email
 async function fetchUserProfileByEmail(email) {
