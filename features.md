@@ -59,8 +59,9 @@ NOTES RE SIGNUP
 2. Logic for confirm sign up
 
 - Ensure that the confirm signup page can only be reached through Signup redirect flow Complete 20/02
-- Create a signupEmail input for this component with validation. 
-- If code validated and returns true then set user email to verified in DB. Create logic that will await verifiyEmailCode resp and if true then verify email and false show error. 
+- Create a signupEmail input for this component with validation. Complete 21/02
+- If submit failure then display error. Complete 21/02
+- If successfully validatidated then update user prop "emailVerified" to "true" 
 - If success on validation and email verifified then redirect to Signin and show email verification success.  
 - Be sure to set setSignupSuccess && setSignupSuccessFeedback back to null in code confirm logic
 
@@ -90,7 +91,16 @@ This section should have a two part flow. 1. The email is added to the input, 2.
 5. Alerts forgot password confirm
 6. Keep track if route is admin or auth
 
-### Feature 5 - Book application 
+### Feature 5 PRIORITY FEATURE 22/02 - Implement Redux Redux Toolkit for State Management
+- 1. Forms 
+    - Each form makes use of React Hook Form. 
+    - Each form should have a slice
+        - The slice name should be "auth"
+        - For any forms on admin side name will be "admin" 
+- 2. Authentication
+- 3. Admin 
+
+### Feature 6 - Book application 
 0. When the user did not verify, there should be an annoying alert box reinding them they did not verify their email and certian functionality will be restricted. They can then opt to resend the the code, which will redirect them to a confirm screen on an admin route. They can then verify from there 
 1. Protect route if no JWT
 
@@ -112,7 +122,7 @@ For this make use of the cloud functions and follow micro services architecture 
 Spark plan (Firebase) no longer offers cloud functions as a service. However, stick to microservice architecture, create this service and deploy with render. Only issue os that you will not have auto scalling and all the great features that come with serverless functions.
 
 Update: 10/02 - Vercel offers FaaS (Functions as a Service) - Use
-NOTE: 12/02 - Opted to use regular express server and deploy to Vercel. Better debugging options and can test locally with more ease. Downside - Server will always be running even if no acitvity. 
+NOTE: 12/02 - Opted to use regular express server and deploy to Render. Better debugging options and can test locally with more ease. Downside - Server will always be running even if no activity. 
 
 - Setting up Nodemailer for with secure password - More info available [`here`](https://stackoverflow.com/questions/72470777/nodemailer-response-535-5-7-8-username-and-password-not-accepted)
 

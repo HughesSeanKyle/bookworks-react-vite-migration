@@ -69,13 +69,15 @@ const ConfirmSignUp = ({
 			setIsFormSubmitting(true);
 			const submitResult = await verifyAndUpdateUserEmail(signupEmail, code);
 
+			console.log('CONFIRM SIGNUP: submitResult', submitResult);
+
 			if (submitResult.error) {
 				setSignupConfirmError(true);
 				setSignupConfirmErrorFeedback(submitResult.error);
 				setSignupConfirmSuccess(null);
 				setSignupConfirmSuccessFeedback(null);
-				setSignupSuccess(null);
-				setSignupSuccessFeedback(null);
+				// setSignupSuccess(null);
+				// setSignupSuccessFeedback(null);
 				setIsFormSubmitting(false);
 				return;
 			}
@@ -85,7 +87,6 @@ const ConfirmSignUp = ({
 			setSignupConfirmError(null);
 			setSignupConfirmErrorFeedback(null);
 			setIsFormSubmitting(false);
-
 			navigate('/auth/signin');
 			return;
 		} catch (error) {
@@ -93,8 +94,8 @@ const ConfirmSignUp = ({
 			setSignupConfirmErrorFeedback(error.message);
 			setSignupConfirmSuccess(null);
 			setSignupConfirmSuccessFeedback(null);
-			setSignupSuccess(null);
-			setSignupSuccessFeedback(null);
+			// setSignupSuccess(null);
+			// setSignupSuccessFeedback(null);
 			setIsFormSubmitting(false);
 			return;
 		}

@@ -74,12 +74,12 @@ function App() {
 								verifyAndUpdateUserEmail={verifyAndUpdateUserEmail}
 							/>
 						) : (
-							// <Navigate to="/auth/signin" />
-							<ConfirmSignUp
-								readAuthState={readAuthState}
-								writeAuthState={writeAuthState}
-								verifyAndUpdateUserEmail={verifyAndUpdateUserEmail}
-							/>
+							<Navigate to="/auth/signin" />
+							// <ConfirmSignUp
+							// 	readAuthState={readAuthState}
+							// 	writeAuthState={writeAuthState}
+							// 	verifyAndUpdateUserEmail={verifyAndUpdateUserEmail}
+							// />
 						)
 					}
 				/>

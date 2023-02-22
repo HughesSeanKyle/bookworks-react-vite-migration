@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
 import { useForm } from 'react-hook-form';
@@ -45,7 +45,6 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 		setSignupSuccess,
 		setSignupErrorFeedback,
 		setSignupSuccessFeedback,
-		setSignupEmail,
 	} = writeAuthState;
 
 	const [isFormSubmitting, setIsFormSubmitting] = useState(null);
@@ -89,7 +88,6 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 			setSignupError(null);
 			setSignupErrorFeedback(null);
 			setIsFormSubmitting(false);
-			setSignupEmail(email);
 
 			navigate('/auth/signup-confirm');
 			return;
@@ -113,6 +111,13 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 		isFormSubmitting
 			? 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500 cursor-not-allowed'
 			: 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500';
+
+	useEffect(() => {
+		return () => {
+			setSignupSuccess(null);
+			setSignupSuccessFeedback(null);
+		};
+	}, []);
 
 	return (
 		<div className="bg-custom-green grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 h-screen w-full">

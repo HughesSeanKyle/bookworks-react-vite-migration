@@ -89,7 +89,7 @@ export const signUpEmailAndPassword = async ({ email, password, username }) => {
 	}
 };
 
-export async function updateUserEmail(email) {
+async function updateUserEmail(email) {
 	try {
 		const userQuerySnapshot = await getDocs(
 			query(collection(db, 'users'), where('email', '==', email))
