@@ -17,7 +17,7 @@ const initialAuthState = {
 
 export const authSlice = createSlice({
 	name: 'auth',
-	initialState,
+	initialState: initialAuthState,
 	reducers: {
 		setSignUp: (state, action) => {
 			state.signUpFormState = action.payload.signUpFormState;

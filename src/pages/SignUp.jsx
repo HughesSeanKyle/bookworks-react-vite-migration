@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSignUp } from '../state';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
@@ -36,6 +38,7 @@ const validationSchema = yup.object().shape({
 });
 
 const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const { signupError, signupErrorFeedback } = readAuthState;
@@ -48,6 +51,20 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 	} = writeAuthState;
 
 	const [isFormSubmitting, setIsFormSubmitting] = useState(null);
+
+	// Redux Implementation (State)
+	// const reduxSignupError = useSelector((state) => state.auth.signupError);
+	// const reduxSignupErrorFeedback = useSelector(
+	// 	(state) => state.auth.signupErrorFeedback
+	// );
+
+	const reduxSignupError = useSelector((state) => state.auth.signupError);
+	const reduxSignupErrorFeedback = useSelector(
+		(state) => state.auth.signupErrorFeedback
+	);
+
+	console.log('reduxSignupError', reduxSignupError);
+	console.log('reduxSignupErrorFeedback', reduxSignupErrorFeedback);
 
 	// Import RHF useForm
 	const {
@@ -67,6 +84,9 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 
 	const onSubmit = async ({ username, email, password }) => {
 		try {
+			/*
+				Need to create state in redux here for spinner too
+			*/
 			setIsFormSubmitting(true);
 			const submitResult = await signUpEmailAndPassword({
 				username,
@@ -74,27 +94,53 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 				password,
 			});
 
+			// REDUX IMPLEMENTATION
 			if (submitResult.error) {
-				setSignupError(true);
-				setSignupErrorFeedback(submitResult.error);
-				setSignupSuccess(null);
-				setSignupSuccessFeedback(null);
-				setIsFormSubmitting(false);
+				dispatch(
+					setSignUp({
+						signUpFormState: 'Test - Add RHF state here later',
+						signupError: true,
+						signupErrorFeedback: submitResult.error,
+						signupSuccess: null,
+						signupSuccessFeedback: null,
+					})
+				);
 				return;
 			}
 
-			setSignupSuccess(true);
-			setSignupSuccessFeedback(submitResult.data);
-			setSignupError(null);
-			setSignupErrorFeedback(null);
-			setIsFormSubmitting(false);
+			// if (submitResult.error) {
+			// 	setSignupError(true);
+			// 	setSignupErrorFeedback(submitResult.error);
+			// 	setSignupSuccess(null);
+			// 	setSignupSuccessFeedback(null);
+			// 	setIsFormSubmitting(false);
+			// 	return;
+			// }
 
-			navigate('/auth/signup-confirm');
-			return;
+			// setSignupSuccess(true);
+			// setSignupSuccessFeedback(submitResult.data);
+			// setSignupError(null);
+			// setSignupErrorFeedback(null);
+			// setIsFormSubmitting(false);
+
+			// navigate('/auth/signup-confirm');
+			// return;
 		} catch (error) {
-			setSignupError(true);
-			setSignupErrorFeedback(error.message);
-			setIsFormSubmitting(false);
+			// setSignupError(true);
+			// setSignupErrorFeedback(error.message);
+			// setIsFormSubmitting(false);
+			// return;
+
+			// Redux
+			dispatch(
+				setSignUp({
+					signUpFormState: 'Test - Add RHF state here later',
+					signupError: true,
+					signupErrorFeedback: error.message,
+					signupSuccess: null,
+					signupSuccessFeedback: null,
+				})
+			);
 			return;
 		}
 	};
@@ -112,12 +158,12 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 			? 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500 cursor-not-allowed'
 			: 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500';
 
-	useEffect(() => {
-		return () => {
-			setSignupSuccess(null);
-			setSignupSuccessFeedback(null);
-		};
-	}, []);
+	// useEffect(() => {
+	// 	return () => {
+	// 		setSignupSuccess(null);
+	// 		setSignupSuccessFeedback(null);
+	// 	};
+	// }, []);
 
 	return (
 		<div className="bg-custom-green grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 h-screen w-full">
@@ -130,10 +176,10 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 						SIGN UP
 					</h2>
 					{/* Alert */}
-					{signupError && (
+					{reduxSignupError && (
 						<DialogError
 							feedbackHeading={'Error'}
-							feedbackMessage={signupErrorFeedback}
+							feedbackMessage={reduxSignupErrorFeedback}
 						/>
 					)}
 
