@@ -1,8 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSignUp } from '../state';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -10,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import DialogError from '../components/Alerts/DialogError';
 
-import { FaSpinner, FaTemperatureLow } from 'react-icons/fa';
+import { FaSpinner } from 'react-icons/fa';
 
 const validationSchema = yup.object().shape({
 	username: yup
@@ -37,39 +35,16 @@ const validationSchema = yup.object().shape({
 		.required('Confirm Password is required'),
 });
 
-const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
+const SignUp = ({ signUpEmailAndPassword }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const { signupError, signupErrorFeedback } = readAuthState;
-
-	const {
-		setSignupError,
-		setSignupSuccess,
-		setSignupErrorFeedback,
-		setSignupSuccessFeedback,
-	} = writeAuthState;
-
-	const [isFormSubmitting, setIsFormSubmitting] = useState(null);
-
-	// Redux Implementation (State)
-	// const reduxSignupError = useSelector((state) => state.auth.signupError);
-	// const reduxSignupErrorFeedback = useSelector(
-	// 	(state) => state.auth.signupErrorFeedback
-	// );
-
-	const reduxIsFormSubmitting = useSelector(
-		(state) => state.auth.isFormSubmitting
-	);
-	const reduxSignupError = useSelector((state) => state.auth.signupError);
-	const reduxSignupErrorFeedback = useSelector(
+	const isFormSubmitting = useSelector((state) => state.auth.isFormSubmitting);
+	const isSignupError = useSelector((state) => state.auth.signupError);
+	const signupErrorFeedback = useSelector(
 		(state) => state.auth.signupErrorFeedback
 	);
 
-	console.log('reduxSignupError', reduxSignupError);
-	console.log('reduxSignupErrorFeedback', reduxSignupErrorFeedback);
-
-	// Import RHF useForm
 	const {
 		register,
 		handleSubmit,
@@ -87,10 +62,6 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 
 	const onSubmit = async ({ username, email, password }) => {
 		try {
-			/*
-				Need to create state in redux here for spinner too
-			*/
-			// setIsFormSubmitting(true);
 			dispatch(
 				setSignUp({
 					isFormSubmitting: true,
@@ -103,11 +74,9 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 				password,
 			});
 
-			// REDUX IMPLEMENTATION
 			if (submitResult.error) {
 				dispatch(
 					setSignUp({
-						signUpFormState: 'Test - Add RHF state here later',
 						signupError: true,
 						signupErrorFeedback: submitResult.error,
 						signupSuccess: null,
@@ -118,37 +87,27 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 				return;
 			}
 
-			// if (submitResult.error) {
-			// 	setSignupError(true);
-			// 	setSignupErrorFeedback(submitResult.error);
-			// 	setSignupSuccess(null);
-			// 	setSignupSuccessFeedback(null);
-			// 	setIsFormSubmitting(false);
-			// 	return;
-			// }
-
-			// setSignupSuccess(true);
-			// setSignupSuccessFeedback(submitResult.data);
-			// setSignupError(null);
-			// setSignupErrorFeedback(null);
-			// setIsFormSubmitting(false);
-
-			// navigate('/auth/signup-confirm');
-			// return;
-		} catch (error) {
-			// setSignupError(true);
-			// setSignupErrorFeedback(error.message);
-			// setIsFormSubmitting(false);
-			// return;
-
-			// Redux
+			// REDUX
 			dispatch(
 				setSignUp({
-					signUpFormState: 'Test - Add RHF state here later',
+					signupError: null,
+					signupErrorFeedback: null,
+					signupSuccess: true,
+					signupSuccessFeedback: submitResult.data,
+					isFormSubmitting: false,
+				})
+			);
+
+			navigate('/auth/signup-confirm');
+			return;
+		} catch (error) {
+			dispatch(
+				setSignUp({
 					signupError: true,
-					signupErrorFeedback: error.message,
+					signupErrorFeedback: submitResult.error,
 					signupSuccess: null,
 					signupSuccessFeedback: null,
+					isFormSubmitting: false,
 				})
 			);
 			return;
@@ -164,16 +123,9 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 		errors?.email?.message ||
 		errors?.password?.message ||
 		errors?.passwordConfirm?.message ||
-		reduxIsFormSubmitting
+		isFormSubmitting
 			? 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500 cursor-not-allowed'
 			: 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500';
-
-	// useEffect(() => {
-	// 	return () => {
-	// 		setSignupSuccess(null);
-	// 		setSignupSuccessFeedback(null);
-	// 	};
-	// }, []);
 
 	return (
 		<div className="bg-custom-green grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 h-screen w-full">
@@ -185,15 +137,14 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 					<h2 className="text-4xl text-custom-white font-bold text-center">
 						SIGN UP
 					</h2>
-					{/* Alert */}
-					{reduxSignupError && (
+
+					{isSignupError && (
 						<DialogError
 							feedbackHeading={'Error'}
-							feedbackMessage={reduxSignupErrorFeedback}
+							feedbackMessage={signupErrorFeedback}
 						/>
 					)}
 
-					{/* Alert */}
 					<div className="flex flex-col text-custom-white py-2">
 						<label>Username</label>
 						<input
@@ -251,7 +202,7 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 							errors?.email?.message ||
 							errors?.password?.message ||
 							errors?.passwordConfirm?.message ||
-							reduxIsFormSubmitting
+							isFormSubmitting
 						}
 						title={
 							!username ||
@@ -261,13 +212,14 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 							errors?.username?.message ||
 							errors?.email?.message ||
 							errors?.password?.message ||
-							errors?.passwordConfirm?.message
+							errors?.passwordConfirm?.message ||
+							isFormSubmitting
 								? 'Please complete the required fields to enable'
 								: 'Sign Up'
 						}
 						onClick={handleSubmit(onSubmit)}
 					>
-						{reduxIsFormSubmitting ? (
+						{isFormSubmitting ? (
 							<div className="w-full flex justify-center my-1">
 								<FaSpinner className="animate-spin mr-2" />
 							</div>

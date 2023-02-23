@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
@@ -14,41 +15,10 @@ import {
 } from './auth/authHelpers.js';
 
 function App() {
-	const [signupError, setSignupError] = useState(null);
-	const [signupErrorFeedback, setSignupErrorFeedback] = useState(null);
-	const [signupSuccess, setSignupSuccess] = useState(null);
-	const [signupSuccessFeedback, setSignupSuccessFeedback] = useState(null);
-
-	const [signupConfirmError, setSignupConfirmError] = useState(null);
-	const [signupConfirmErrorFeedback, setSignupConfirmErrorFeedback] =
-		useState(null);
-	const [signupConfirmSuccess, setSignupConfirmSuccess] = useState(null);
-	const [signupConfirmSuccessFeedback, setSignupConfirmSuccessFeedback] =
-		useState(null);
-
-	const readAuthState = {
-		signupError,
-		signupSuccess,
-		signupErrorFeedback,
-		signupSuccessFeedback,
-		signupConfirmError,
-		signupConfirmErrorFeedback,
-		signupConfirmSuccess,
-		signupConfirmSuccessFeedback,
-	};
-
-	const writeAuthState = {
-		setSignupError,
-		setSignupSuccess,
-		setSignupErrorFeedback,
-		setSignupSuccessFeedback,
-		setSignupConfirmError,
-		setSignupConfirmErrorFeedback,
-		setSignupConfirmSuccess,
-		setSignupConfirmSuccessFeedback,
-	};
-
-	console.log('readAuthState', readAuthState);
+	const isSignupSuccess = useSelector((state) => state.auth.signupSuccess);
+	const isSignupConfirmError = useSelector(
+		(state) => state.auth.signupConfirmError
+	);
 
 	return (
 		<BrowserRouter>
@@ -56,21 +26,13 @@ function App() {
 				<Route path={'/auth/signin'} element={<SignIn />} />
 				<Route
 					path={'/auth/signup'}
-					element={
-						<SignUp
-							signUpEmailAndPassword={signUpEmailAndPassword}
-							readAuthState={readAuthState}
-							writeAuthState={writeAuthState}
-						/>
-					}
+					element={<SignUp signUpEmailAndPassword={signUpEmailAndPassword} />}
 				/>
 				<Route
 					path={'/auth/signup-confirm'}
 					element={
-						signupSuccess ? (
+						isSignupSuccess || isSignupConfirmError ? (
 							<ConfirmSignUp
-								readAuthState={readAuthState}
-								writeAuthState={writeAuthState}
 								verifyAndUpdateUserEmail={verifyAndUpdateUserEmail}
 							/>
 						) : (
