@@ -54,15 +54,15 @@ export async function verifyEmailCode(recipient, code) {
 
 		const data = await response.json();
 		console.log(data);
-		if (data.error) {
+		if (data.data.error) {
 			return {
-				data: data.error,
-				error: null,
+				data: null,
+				error: data.data.error,
 			};
 		}
 
 		return {
-			data: data.data,
+			data: data.data.data,
 			error: null,
 		};
 	} catch (error) {

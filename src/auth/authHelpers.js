@@ -16,6 +16,7 @@ import {
 	getDoc,
 	query,
 	where,
+	updateDoc,
 } from 'firebase/firestore';
 
 import keys from '../keys.js';

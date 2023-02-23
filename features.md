@@ -95,6 +95,8 @@ This section should have a two part flow. 1. The email is added to the input, 2.
 1. Authentication
     - 1.1 Create a slice for auth "auth" Complete 22/02
     - 1.2 Set up a reducer function for each form, it's state and alerts 
+        - 1.2.1 Reducer for Signup Complete 23/02
+        - 1.2.2 Reducer for Signup Confirm 23/02
 2. Admin 
 
 ### Feature 6 - Book application 
