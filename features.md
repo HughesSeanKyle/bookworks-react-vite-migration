@@ -53,8 +53,8 @@ Additionaly, when all needed methods are implemented convert service to a cloud 
 - On Error then show signup error message 20/02
 - On success redirect to Signup confirm  20/02
 
-NOTES RE SIGNUP
-- Firebase already hashes the password upon Signup. So no need for brypt and no need to store hashed password in DB 17/02
+NOTES RE SIGNUP 17/02
+- Firebase already hashes the password upon Signup. So no need for brypt and no need to store hashed password in DB 
 
 2. Logic for confirm sign up
 
@@ -66,6 +66,7 @@ NOTES RE SIGNUP
 - Be sure to set setSignupSuccess && setSignupSuccessFeedback back to null in code confirm logic Complete 23/02
 
 3. Logic for signin 
+- Create separate spinner state
 4. Logic for signout
 5. Logic Forgot Password 
 This section should have a two part flow. 1. The email is added to the input, 2. The confirm code ui form (Comp can only be accessed by initiating step 1). Make use of useNavigate
@@ -83,7 +84,7 @@ This section should have a two part flow. 1. The email is added to the input, 2.
 ### Feature 4 - User authentication alerts 
 0. NOTE: When implementing alerts here, try to incorporate the useTrasition hook to animate the mounting and unmounting of the alert. See if a lib like animate.js can be used. 
 1. Alerts sign up Complete 20/02
-2. Alerts confirm sign up
+2. Alerts confirm sign up Complete 23/02
 3. Alerts sign in
 - REMOVE bcrypt LOGIC FROM HERE => PASSWORDS ALREADY HASHED VIA FIREBASE
 4. Alerts sign out
