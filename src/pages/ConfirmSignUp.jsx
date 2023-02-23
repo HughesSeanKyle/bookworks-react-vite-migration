@@ -1,8 +1,7 @@
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSignUp, setSignUpConfirm } from '../state';
+import { Link, useNavigate } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
-
-import { useNavigate } from 'react-router-dom';
-import { useState, useRef } from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,30 +25,24 @@ const validationSchema = yup.object().shape({
 		.required('Email is a required field'),
 });
 
-const ConfirmSignUp = ({
-	verifyAndUpdateUserEmail,
-	readAuthState,
-	writeAuthState,
-}) => {
+const ConfirmSignUp = ({ verifyAndUpdateUserEmail }) => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const {
-		signupSuccess,
-		signupSuccessFeedback,
-		signupConfirmError,
-		signupConfirmErrorFeedback,
-	} = readAuthState;
-
-	const {
-		setSignupSuccess,
-		setSignupSuccessFeedback,
-		setSignupConfirmError,
-		setSignupConfirmErrorFeedback,
-		setSignupConfirmSuccess,
-		setSignupConfirmSuccessFeedback,
-	} = writeAuthState;
-
-	const [isFormSubmitting, setIsFormSubmitting] = useState(null);
+	const isFormSubmitting = useSelector((state) => state.auth.isFormSubmitting);
+	const isSignupSuccess = useSelector((state) => state.auth.signupSuccess);
+	const signupSuccessFeedback = useSelector(
+		(state) => state.auth.signupSuccessFeedback
+	);
+	const isSignupConfirmError = useSelector(
+		(state) => state.auth.signupConfirmError
+	);
+	const signupConfirmErrorFeedback = useSelector(
+		(state) => state.auth.signupConfirmErrorFeedback
+	);
+	const isSignupConfirmSuccess = useSelector(
+		(state) => state.auth.signupConfirmSuccess
+	);
 
 	const {
 		register,
@@ -66,37 +59,60 @@ const ConfirmSignUp = ({
 
 	const onSubmit = async ({ signupEmail, code }) => {
 		try {
-			setIsFormSubmitting(true);
+			dispatch(
+				setSignUpConfirm({
+					isFormSubmitting: true,
+				})
+			);
 			const submitResult = await verifyAndUpdateUserEmail(signupEmail, code);
 
 			console.log('CONFIRM SIGNUP: submitResult', submitResult);
 
 			if (submitResult.error) {
-				setSignupConfirmError(true);
-				setSignupConfirmErrorFeedback(submitResult.error);
-				setSignupConfirmSuccess(null);
-				setSignupConfirmSuccessFeedback(null);
-				// setSignupSuccess(null);
-				// setSignupSuccessFeedback(null);
-				setIsFormSubmitting(false);
+				dispatch(
+					setSignUpConfirm({
+						signupConfirmError: true,
+						signupConfirmErrorFeedback: submitResult.error,
+						isFormSubmitting: false,
+					})
+				);
+				dispatch(
+					setSignUp({
+						signupSuccess: null,
+						signupSuccessFeedback: null,
+					})
+				);
 				return;
 			}
 
-			setSignupConfirmSuccess(true);
-			setSignupConfirmSuccessFeedback(submitResult.data);
-			setSignupConfirmError(null);
-			setSignupConfirmErrorFeedback(null);
-			setIsFormSubmitting(false);
-			navigate('/auth/signin');
-			return;
+			dispatch(
+				setSignUpConfirm({
+					signupConfirmError: null,
+					signupConfirmErrorFeedback: null,
+					signupConfirmSuccess: true,
+					signupConfirmSuccessFeedback: submitResult.data,
+					isFormSubmitting: false,
+				})
+			);
+
+			if (isSignupConfirmSuccess) {
+				navigate('/auth/signin');
+				// return;
+			}
 		} catch (error) {
-			setSignupConfirmError(true);
-			setSignupConfirmErrorFeedback(error.message);
-			setSignupConfirmSuccess(null);
-			setSignupConfirmSuccessFeedback(null);
-			// setSignupSuccess(null);
-			// setSignupSuccessFeedback(null);
-			setIsFormSubmitting(false);
+			dispatch(
+				setSignUp({
+					signupSuccess: null,
+					signupSuccessFeedback: null,
+				})
+			);
+			dispatch(
+				setSignUpConfirm({
+					signupConfirmError: true,
+					signupConfirmErrorFeedback: error.message,
+					isFormSubmitting: false,
+				})
+			);
 			return;
 		}
 	};
@@ -117,14 +133,14 @@ const ConfirmSignUp = ({
 						CONFIRM SIGN UP
 					</h2>
 
-					{signupSuccess && (
+					{isSignupSuccess && (
 						<DialogSuccess
 							feedbackHeading={'Success'}
 							feedbackMessage={signupSuccessFeedback}
 						/>
 					)}
 
-					{signupConfirmError && (
+					{isSignupConfirmError && (
 						<DialogError
 							feedbackHeading={'Error'}
 							feedbackMessage={signupConfirmErrorFeedback}

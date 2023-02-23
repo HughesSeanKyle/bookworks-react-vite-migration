@@ -61,9 +61,9 @@ NOTES RE SIGNUP
 - Ensure that the confirm signup page can only be reached through Signup redirect flow Complete 20/02
 - Create a signupEmail input for this component with validation. Complete 21/02
 - If submit failure then display error. Complete 21/02
-- If successfully validatidated then update user prop "emailVerified" to "true" 
-- If success on validation and email verifified then redirect to Signin and show email verification success.  
-- Be sure to set setSignupSuccess && setSignupSuccessFeedback back to null in code confirm logic
+- If successfully validatidated then update user prop "emailVerified" to "true" Complete 23/02
+- If success on validation and email verifified then redirect to Signin and show email verification success.  Complete 23/02
+- Be sure to set setSignupSuccess && setSignupSuccessFeedback back to null in code confirm logic Complete 23/02
 
 3. Logic for signin 
 4. Logic for signout
@@ -92,13 +92,12 @@ This section should have a two part flow. 1. The email is added to the input, 2.
 6. Keep track if route is admin or auth
 
 ### Feature 5 PRIORITY FEATURE 22/02 - Implement Redux Redux Toolkit for State Management
-- 1. Forms 
-    - Each form makes use of React Hook Form. 
-    - Each form should have a slice
-        - The slice name should be "auth"
-        - For any forms on admin side name will be "admin" 
-- 2. Authentication
-- 3. Admin 
+1. Authentication
+    - 1.1 Create a slice for auth "auth" Complete 22/02
+    - 1.2 Set up a reducer function for each form, it's state and alerts 
+        - 1.2.1 Reducer for Signup Complete 23/02
+        - 1.2.2 Reducer for Signup Complete 23/02
+2. Admin 
 
 ### Feature 6 - Book application 
 0. When the user did not verify, there should be an annoying alert box reinding them they did not verify their email and certian functionality will be restricted. They can then opt to resend the the code, which will redirect them to a confirm screen on an admin route. They can then verify from there 

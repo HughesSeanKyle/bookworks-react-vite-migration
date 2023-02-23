@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSignUp } from '../state';
+import { Link, useNavigate } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -35,21 +35,16 @@ const validationSchema = yup.object().shape({
 		.required('Confirm Password is required'),
 });
 
-const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
+const SignUp = ({ signUpEmailAndPassword }) => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const { signupError, signupErrorFeedback } = readAuthState;
+	const isFormSubmitting = useSelector((state) => state.auth.isFormSubmitting);
+	const isSignupError = useSelector((state) => state.auth.signupError);
+	const signupErrorFeedback = useSelector(
+		(state) => state.auth.signupErrorFeedback
+	);
 
-	const {
-		setSignupError,
-		setSignupSuccess,
-		setSignupErrorFeedback,
-		setSignupSuccessFeedback,
-	} = writeAuthState;
-
-	const [isFormSubmitting, setIsFormSubmitting] = useState(null);
-
-	// Import RHF useForm
 	const {
 		register,
 		handleSubmit,
@@ -67,7 +62,12 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 
 	const onSubmit = async ({ username, email, password }) => {
 		try {
-			setIsFormSubmitting(true);
+			dispatch(
+				setSignUp({
+					isFormSubmitting: true,
+				})
+			);
+
 			const submitResult = await signUpEmailAndPassword({
 				username,
 				email,
@@ -75,26 +75,41 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 			});
 
 			if (submitResult.error) {
-				setSignupError(true);
-				setSignupErrorFeedback(submitResult.error);
-				setSignupSuccess(null);
-				setSignupSuccessFeedback(null);
-				setIsFormSubmitting(false);
+				dispatch(
+					setSignUp({
+						signupError: true,
+						signupErrorFeedback: submitResult.error,
+						signupSuccess: null,
+						signupSuccessFeedback: null,
+						isFormSubmitting: false,
+					})
+				);
 				return;
 			}
 
-			setSignupSuccess(true);
-			setSignupSuccessFeedback(submitResult.data);
-			setSignupError(null);
-			setSignupErrorFeedback(null);
-			setIsFormSubmitting(false);
+			// REDUX
+			dispatch(
+				setSignUp({
+					signupError: null,
+					signupErrorFeedback: null,
+					signupSuccess: true,
+					signupSuccessFeedback: submitResult.data,
+					isFormSubmitting: false,
+				})
+			);
 
 			navigate('/auth/signup-confirm');
 			return;
 		} catch (error) {
-			setSignupError(true);
-			setSignupErrorFeedback(error.message);
-			setIsFormSubmitting(false);
+			dispatch(
+				setSignUp({
+					signupError: true,
+					signupErrorFeedback: submitResult.error,
+					signupSuccess: null,
+					signupSuccessFeedback: null,
+					isFormSubmitting: false,
+				})
+			);
 			return;
 		}
 	};
@@ -112,13 +127,6 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 			? 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500 cursor-not-allowed'
 			: 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500';
 
-	useEffect(() => {
-		return () => {
-			setSignupSuccess(null);
-			setSignupSuccessFeedback(null);
-		};
-	}, []);
-
 	return (
 		<div className="bg-custom-green grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 h-screen w-full">
 			<div className="bg-custom-green overflow-auto flex flex-col justify-center content-center items-center form-padding image-bg-mobile-only dark-layer">
@@ -129,15 +137,14 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 					<h2 className="text-4xl text-custom-white font-bold text-center">
 						SIGN UP
 					</h2>
-					{/* Alert */}
-					{signupError && (
+
+					{isSignupError && (
 						<DialogError
 							feedbackHeading={'Error'}
 							feedbackMessage={signupErrorFeedback}
 						/>
 					)}
 
-					{/* Alert */}
 					<div className="flex flex-col text-custom-white py-2">
 						<label>Username</label>
 						<input
@@ -205,7 +212,8 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 							errors?.username?.message ||
 							errors?.email?.message ||
 							errors?.password?.message ||
-							errors?.passwordConfirm?.message
+							errors?.passwordConfirm?.message ||
+							isFormSubmitting
 								? 'Please complete the required fields to enable'
 								: 'Sign Up'
 						}
