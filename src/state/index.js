@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialAuthState = {
+	// Auth form submissions
+	isFormSubmitting: false,
 	// SignUp
 	signUpFormState: null,
 	signupError: null,
@@ -20,6 +22,7 @@ export const authSlice = createSlice({
 	initialState: initialAuthState,
 	reducers: {
 		setSignUp: (state, action) => {
+			state.isFormSubmitting = action.payload.isFormSubmitting;
 			state.signUpFormState = action.payload.signUpFormState;
 			state.signupError = action.payload.signupError;
 			state.signupErrorFeedback = action.payload.signupErrorFeedback;

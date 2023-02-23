@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import DialogError from '../components/Alerts/DialogError';
 
-import { FaSpinner } from 'react-icons/fa';
+import { FaSpinner, FaTemperatureLow } from 'react-icons/fa';
 
 const validationSchema = yup.object().shape({
 	username: yup
@@ -58,6 +58,9 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 	// 	(state) => state.auth.signupErrorFeedback
 	// );
 
+	const reduxIsFormSubmitting = useSelector(
+		(state) => state.auth.isFormSubmitting
+	);
 	const reduxSignupError = useSelector((state) => state.auth.signupError);
 	const reduxSignupErrorFeedback = useSelector(
 		(state) => state.auth.signupErrorFeedback
@@ -87,7 +90,13 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 			/*
 				Need to create state in redux here for spinner too
 			*/
-			setIsFormSubmitting(true);
+			// setIsFormSubmitting(true);
+			dispatch(
+				setSignUp({
+					isFormSubmitting: true,
+				})
+			);
+
 			const submitResult = await signUpEmailAndPassword({
 				username,
 				email,
@@ -103,6 +112,7 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 						signupErrorFeedback: submitResult.error,
 						signupSuccess: null,
 						signupSuccessFeedback: null,
+						isFormSubmitting: false,
 					})
 				);
 				return;
@@ -154,7 +164,7 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 		errors?.email?.message ||
 		errors?.password?.message ||
 		errors?.passwordConfirm?.message ||
-		isFormSubmitting
+		reduxIsFormSubmitting
 			? 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500 cursor-not-allowed'
 			: 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500';
 
@@ -241,7 +251,7 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 							errors?.email?.message ||
 							errors?.password?.message ||
 							errors?.passwordConfirm?.message ||
-							isFormSubmitting
+							reduxIsFormSubmitting
 						}
 						title={
 							!username ||
@@ -257,7 +267,7 @@ const SignUp = ({ signUpEmailAndPassword, readAuthState, writeAuthState }) => {
 						}
 						onClick={handleSubmit(onSubmit)}
 					>
-						{isFormSubmitting ? (
+						{reduxIsFormSubmitting ? (
 							<div className="w-full flex justify-center my-1">
 								<FaSpinner className="animate-spin mr-2" />
 							</div>
