@@ -40,6 +40,9 @@ const ConfirmSignUp = ({ verifyAndUpdateUserEmail }) => {
 	const signupConfirmErrorFeedback = useSelector(
 		(state) => state.auth.signupConfirmErrorFeedback
 	);
+	const isSignupConfirmSuccess = useSelector(
+		(state) => state.auth.signupConfirmSuccess
+	);
 
 	const {
 		register,
@@ -82,13 +85,20 @@ const ConfirmSignUp = ({ verifyAndUpdateUserEmail }) => {
 				return;
 			}
 
-			// setSignupConfirmSuccess(true);
-			// setSignupConfirmSuccessFeedback(submitResult.data);
-			// setSignupConfirmError(null);
-			// setSignupConfirmErrorFeedback(null);
-			// setIsFormSubmitting(false);
-			navigate('/auth/signin');
-			return;
+			dispatch(
+				setSignUpConfirm({
+					signupConfirmError: null,
+					signupConfirmErrorFeedback: null,
+					signupConfirmSuccess: true,
+					signupConfirmSuccessFeedback: submitResult.data,
+					isFormSubmitting: false,
+				})
+			);
+
+			if (isSignupConfirmSuccess) {
+				navigate('/auth/signin');
+				// return;
+			}
 		} catch (error) {
 			dispatch(
 				setSignUp({

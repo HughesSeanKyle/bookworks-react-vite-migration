@@ -129,7 +129,7 @@ export async function verifyAndUpdateUserEmail(email, code) {
 			return { data: null, error: updateUserEmailResult.error };
 		}
 
-		return { data: verificationResult.data, error: null };
+		return { data: 'Email verification success', error: null };
 	} catch (error) {
 		return {
 			data: null,

@@ -1,8 +1,15 @@
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSignUp, setSignUpConfirm } from '../state';
+import { Link, useNavigate } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import DialogSuccess from '../components/Alerts/DialogSuccess';
+import DialogError from '../components/Alerts/DialogError';
+
+import { FaSpinner } from 'react-icons/fa';
 
 // Validation Schema
 const validationSchema = yup.object().shape({
@@ -11,12 +18,28 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = () => {
-	// Import RHF useForm
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const isFormSubmitting = useSelector((state) => state.auth.isFormSubmitting);
+	const isSignupConfirmSuccess = useSelector(
+		(state) => state.auth.signupConfirmSuccess
+	);
+	const signupConfirmSuccessFeedback = useSelector(
+		(state) => state.auth.signupConfirmSuccessFeedback
+	);
+	// const isSignupConfirmError = useSelector(
+	// 	(state) => state.auth.signupConfirmError
+	// );
+	// const signupConfirmErrorFeedback = useSelector(
+	// 	(state) => state.auth.signupConfirmErrorFeedback
+	// );
+
 	const {
 		register,
 		handleSubmit,
 		watch,
-		formState: { errors, isSubmitting },
+		formState: { errors },
 	} = useForm({
 		mode: 'onBlur',
 		resolver: yupResolver(validationSchema),
@@ -29,7 +52,8 @@ const SignIn = () => {
 		!username ||
 		!password ||
 		errors?.username?.message ||
-		errors?.password?.message
+		errors?.password?.message ||
+		isFormSubmitting
 			? 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500 cursor-not-allowed'
 			: 'w-full my-5 py-2 bg-custom-green shadow-md shadow-custom-gray text-white font-light rounded-lg hover:shadow-md hover:shadow-custom-white hover:bg-custom-green-500';
 
@@ -43,6 +67,21 @@ const SignIn = () => {
 					<h2 className="text-4xl text-custom-white font-bold text-center">
 						SIGN IN
 					</h2>
+
+					{isSignupConfirmSuccess && (
+						<DialogSuccess
+							feedbackHeading={'Success'}
+							feedbackMessage={signupConfirmSuccessFeedback}
+						/>
+					)}
+
+					{/* {isSignupConfirmError && (
+						<DialogError
+							feedbackHeading={'Error'}
+							feedbackMessage={signupConfirmErrorFeedback}
+						/>
+					)} */}
+
 					<div className="flex flex-col text-custom-white py-2">
 						<label>Username</label>
 						<input
@@ -72,14 +111,20 @@ const SignIn = () => {
 					</div>
 					<button
 						className={disabledBtnClasses}
-						disabled={!username || !password}
+						disabled={!username || !password || isFormSubmitting}
 						title={
-							!username || !password
+							!username || !password || isFormSubmitting
 								? 'Please complete the required fields to enable'
 								: 'Sign In'
 						}
 					>
-						SIGN IN
+						{isFormSubmitting ? (
+							<div className="w-full flex justify-center my-1">
+								<FaSpinner className="animate-spin mr-2" />
+							</div>
+						) : (
+							'SUBMIT'
+						)}
 					</button>
 				</form>
 				<div className="max-w-[333px] flex flex-wrap mt-3 relative w-2/3 mobile-width-reset text-custom-white font-semibold">
