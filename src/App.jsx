@@ -19,6 +19,7 @@ function App() {
 	const isSignupConfirmError = useSelector(
 		(state) => state.auth.signupConfirmError
 	);
+	const isFormSubmitting = useSelector((state) => state.auth.isFormSubmitting);
 
 	return (
 		<BrowserRouter>
@@ -31,7 +32,7 @@ function App() {
 				<Route
 					path={'/auth/signup-confirm'}
 					element={
-						isSignupSuccess || isSignupConfirmError ? (
+						isSignupSuccess || isSignupConfirmError || isFormSubmitting ? (
 							<ConfirmSignUp
 								verifyAndUpdateUserEmail={verifyAndUpdateUserEmail}
 							/>

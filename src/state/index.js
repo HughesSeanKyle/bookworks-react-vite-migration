@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialAuthState = {
-	// Auth form submissions
-	isFormSubmitting: false,
 	// SignUp
+	isFormSubmitting: false,
 	signupError: null,
 	signupErrorFeedback: null,
 	signupSuccess: null,

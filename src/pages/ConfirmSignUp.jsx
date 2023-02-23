@@ -95,7 +95,7 @@ const ConfirmSignUp = ({ verifyAndUpdateUserEmail }) => {
 				})
 			);
 
-			if (isSignupConfirmSuccess) {
+			if (isSignupConfirmSuccess && !isFormSubmitting) {
 				navigate('/auth/signin');
 				// return;
 			}
