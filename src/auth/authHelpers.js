@@ -242,7 +242,7 @@ async function signInEmailAndPassword({ email, password }) {
 // 	await signInEmailAndPassword(userData);
 // })();
 
-// **Forgot Password logic and flow
+// **Forgot Password logic and flow => Customize with email service. Standard Firebase forgot password does not have functionality for an auth code
 
 async function sendPasswordReset(email) {
 	try {
