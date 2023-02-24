@@ -72,7 +72,7 @@ NOTES RE SIGNUP 17/02
 This section should have a two part flow. 1. The email is added to the input, 2. The confirm code ui form (Comp can only be accessed by initiating step 1). Make use of useNavigate
 
 5.0 => Implement email service here
-- 5.0.1. User initiaites forgot password 
+- 5.0.1. User initializes forgot password 
 - 5.0.2. Email with custom message and code sent to user 
 - 5.0.3. User will input code, new pw and confirm new pw on forgot password confirm page 
 
@@ -146,7 +146,24 @@ NOTE: 12/02 - Opted to use regular express server and deploy to Render. Better d
 
 6. NOTE: Express API deployed to Render instead. 
 
-## Migration 
+## Auth service features 
+
+### Feature 24/02 - Setup custom update password logic and integrate with custom email service
+Reason for feature
+
+A custom email confirmation code service has been created which is used to confirm the signup of the user. The service has also been made to be reusable for other logic, such as a forgot password flow or confirm a sensitive user action (e.g deleting high value information). This portion will focus on updating a user's password by consuming the email service. 
+
+1. Setup express service to update a password by email 
+2. Ensure that the update password function/logic can only be accessed if the validated code is correct. If not, then throw error 
+3. Limit the request to update password to 3 tries per 24 hour cycle 
+4. If limit reached return warning
+5. Make sure that this route can only be accessed via specific domains
+- Localhost 
+- Bookworks domain 
+6. Deploy to render for testing 
+7. Later, deploy as serverless function  
+
+## Migrations
 1. 17/02/
 - Migrated from Create React App to React + Vite due to Webpack polyfil issues. 
 - Removing brcypt as Firebase already hashes passwords 
