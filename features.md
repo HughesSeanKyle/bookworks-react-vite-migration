@@ -169,3 +169,47 @@ A custom email confirmation code service has been created which is used to confi
 - Removing brcypt as Firebase already hashes passwords 
 - Removed dotenv library and store keys for dev and production separately.
 - Removed axios in favor of fetch to bypass axios 504 issue.  
+
+
+## Extra task for later 
+0. Implement a smart contract on Optimism or Arbitrum
+- 0.1 Start with something simple like uploading content attached to NFT
+- 0.2 Integrate metamask into app to buy the NFT 
+- 0.3 
+
+1. Write tests app. Do some more research on below and integrate
+- 1.1 Unit Tests: These are tests that check individual components of the application, such as functions or classes. Unit tests ensure that each component works as expected and helps catch bugs early in the development process.
+
+- 1.2 Integration Tests: These tests check that different parts of the application work together correctly. For example, an integration test could check that the login form interacts correctly with the user database.
+
+- 1.3 End-to-End Tests: These tests simulate a user interacting with the application and check that everything works correctly from start to finish. End-to-end tests help catch issues that might only appear when multiple parts of the application are used together.
+
+- 1.4 Performance Tests: These tests check that the application performs well under expected user loads. Performance tests help ensure that the application can handle high levels of traffic without slowing down or crashing.
+
+- 1.5 Accessibility Tests: These tests check that the application is accessible to users with disabilities. Accessibility tests ensure that the application can be used by as many people as possible.
+
+- 1.6 Security Tests: These tests check that the application is secure and resistant to common types of attacks, such as SQL injection or cross-site scripting.
+
+- 1.7 Usability Tests: These tests evaluate how easy it is for users to interact with the application. Usability tests help ensure that the application is intuitive and easy to use.
+
+2. Set up CICD. Do some more research on below and integrate 
+
+- 2.1 Source control: Use a version control system such as Git to manage your application's source code.
+
+- 2.2 Build: Automate the build process using a build tool such as Gradle or Maven. The build process should compile the code, run tests, and create artifacts.
+
+- 2.3 Test: Automate testing using a testing framework such as JUnit or Selenium. Tests should run as part of the build process, and you should have different types of tests, such as unit, integration, and acceptance tests.
+
+- 2.4 Deployment: Automate the deployment process using a deployment tool such as Ansible or Kubernetes. The deployment process should be consistent and repeatable.
+
+- 2.5 Environment management: Manage your environments (development, staging, production) using infrastructure as code (IaC) tools such as Terraform or CloudFormation.
+
+- 2.6 Continuous integration: Continuously integrate changes into the codebase using a CI tool such as Jenkins or CircleCI. This ensures that changes are integrated regularly and that issues are caught early.
+
+- 2.7 Continuous delivery/deployment: Continuously deliver/deploy changes to production using a CD tool such as Spinnaker or AWS CodeDeploy. This ensures that changes are delivered quickly and reliably.
+
+- 2.8 Monitoring: Monitor your application using a monitoring tool such as Prometheus or Grafana. This helps you identify issues and troubleshoot problems.
+
+- 2.9 Logging: Log application events using a logging tool such as ELK or Splunk. This helps you debug issues and analyze application behavior.
+
+- 2.10 Security: Integrate security testing into the pipeline using a security tool such as OWASP ZAP or SonarQube. This helps you identify security issues early in the development cycle.
