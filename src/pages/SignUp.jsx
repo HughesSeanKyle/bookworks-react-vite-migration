@@ -2,8 +2,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSignUp } from '../state';
 import { Link, useNavigate } from 'react-router-dom';
 import signUpImage from '../assets/images/signup-image.jpg';
-import { useForm } from 'react-hook-form';
+
 import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import DialogError from '../components/Alerts/DialogError';
@@ -104,7 +105,7 @@ const SignUp = ({ signUpEmailAndPassword }) => {
 			dispatch(
 				setSignUp({
 					signupError: true,
-					signupErrorFeedback: submitResult.error,
+					signupErrorFeedback: error.message,
 					signupSuccess: null,
 					signupSuccessFeedback: null,
 					isFormSubmitting: false,

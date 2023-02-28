@@ -8,11 +8,13 @@ import ForgotPassword from './pages/ForgotPassword.jsx';
 import ForgotPasswordConfirm from './pages/ForgotPasswordConfirm.jsx';
 import ConfirmSignUp from './pages/ConfirmSignUp.jsx';
 
-// Import all auth functions here and pass down as prop instead
 import {
 	signUpEmailAndPassword,
 	verifyAndUpdateUserEmail,
 } from './auth/authHelpers.js';
+
+import { sendVerificationCode, verifyEmailCode } from './api/emailService.js';
+import { updatePassword } from './api/authService.js';
 
 function App() {
 	const isSignupSuccess = useSelector((state) => state.auth.signupSuccess);
@@ -46,7 +48,12 @@ function App() {
 						)
 					}
 				/>
-				<Route path={'/auth/forgot-password'} element={<ForgotPassword />} />
+				<Route
+					path={'/auth/forgot-password'}
+					element={
+						<ForgotPassword sendVerificationCode={sendVerificationCode} />
+					}
+				/>
 				<Route
 					path={'/auth/forgot-password-confirm'}
 					element={<ForgotPasswordConfirm />}
