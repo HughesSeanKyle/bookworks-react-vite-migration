@@ -29,7 +29,7 @@ const ForgotPasswordConfirm = () => {
 		register,
 		handleSubmit,
 		watch,
-		formState: { errors, isSubmitting },
+		formState: { errors },
 	} = useForm({
 		mode: 'onBlur',
 		resolver: yupResolver(validationSchema),
@@ -70,7 +70,7 @@ const ForgotPasswordConfirm = () => {
 						<p className="text-custom-danger">{errors?.code?.message}</p>
 					</div>
 					<div className="flex flex-col text-custom-white py-2">
-						<label>Password</label>
+						<label>New Password</label>
 						<input
 							className="p-2 rounded-lg bg-custom-white mt-2 focus:border-blue-900 focus:outline-none focus:ring focus:ring-custom-gray text-custom-black"
 							type="password"
@@ -81,7 +81,7 @@ const ForgotPasswordConfirm = () => {
 						<p className="text-custom-danger">{errors?.password?.message}</p>
 					</div>
 					<div className="flex flex-col text-custom-white py-2">
-						<label>Confirm Password</label>
+						<label>Confirm New Password</label>
 						<input
 							className="p-2 rounded-lg bg-custom-white mt-2 focus:border-blue-900 focus:outline-none focus:ring focus:ring-custom-gray text-custom-black"
 							type="password"

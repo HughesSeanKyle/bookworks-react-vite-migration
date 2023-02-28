@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialAuthState = {
-	// SignUp
 	isFormSubmitting: false,
+	// SignUp
 	signupError: null,
 	signupErrorFeedback: null,
 	signupSuccess: null,
@@ -12,6 +12,16 @@ const initialAuthState = {
 	signupConfirmErrorFeedback: null,
 	signupConfirmSuccess: null,
 	signupConfirmSuccessFeedback: null,
+	// Init forgot password
+	forgotPasswordError: null,
+	forgotPasswordErrorFeedback: null,
+	forgotPasswordSuccess: null,
+	forgotPasswordSuccessFeedback: null,
+	// Forgot password Confirm
+	forgotPasswordConfimrError: null,
+	forgotPasswordConfimrErrorFeedback: null,
+	forgotPasswordConfimrSuccess: null,
+	forgotPasswordConfimrSuccessFeedback: null,
 };
 
 export const authSlice = createSlice({
@@ -34,6 +44,15 @@ export const authSlice = createSlice({
 			state.signupConfirmSuccessFeedback =
 				action.payload.signupConfirmSuccessFeedback;
 		},
+		setForgotPassword: (state, action) => {
+			state.isFormSubmitting = action.payload.isFormSubmitting;
+			state.forgotPasswordError = action.payload.forgotPasswordError;
+			state.forgotPasswordErrorFeedback =
+				action.payload.forgotPasswordErrorFeedback;
+			state.forgotPasswordSuccess = action.payload.forgotPasswordSuccess;
+			state.forgotPasswordSuccessFeedback =
+				action.payload.forgotPasswordSuccessFeedback;
+		},
 		// setLogout: (state) => {
 		// 	state.user = null;
 		// 	state.token = null;
@@ -41,5 +60,6 @@ export const authSlice = createSlice({
 	},
 });
 
-export const { setSignUp, setSignUpConfirm } = authSlice.actions;
+export const { setSignUp, setSignUpConfirm, setForgotPassword } =
+	authSlice.actions;
 export default authSlice.reducer;
