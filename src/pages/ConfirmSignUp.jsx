@@ -86,6 +86,13 @@ const ConfirmSignUp = ({ verifyAndUpdateUserEmail }) => {
 			}
 
 			dispatch(
+				setSignUp({
+					signupSuccess: null,
+					signupSuccessFeedback: null,
+				})
+			);
+
+			dispatch(
 				setSignUpConfirm({
 					signupConfirmError: null,
 					signupConfirmErrorFeedback: null,
