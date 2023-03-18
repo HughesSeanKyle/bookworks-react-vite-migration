@@ -19,8 +19,6 @@ import {
 	updateDoc,
 } from 'firebase/firestore';
 
-import keys from '../keys.js';
-
 import { sendVerificationCode, verifyEmailCode } from '../api/emailService.js';
 
 const isDevMode = import.meta.env.MODE === 'development' ? true : false;
