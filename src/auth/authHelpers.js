@@ -24,20 +24,23 @@ import keys from '../keys.js';
 import { sendVerificationCode, verifyEmailCode } from '../api/emailService.js';
 
 const isDevMode = import.meta.env.MODE === 'development' ? true : false;
+const API_KEY = import.meta.env.VITE_API_KEY;
+const AUTH_DOMAIN = import.meta.env.VITE_AUTH_DOMAIN;
+const PROJECT_ID = import.meta.env.VITE_PROJECT_ID;
+const STORAGE_BUCKET = import.meta.env.VITE_STORAGE_BUCKET;
+const MESSAGING_SENDER_ID = import.meta.env.VITE_MESSAGING_SENDER_ID;
+const APP_ID = import.meta.env.VITE_APP_ID;
 
 export const firebaseConfig = {
-	apiKey: isDevMode ? keys.API_KEY : process.env.API_KEY,
-	authDomain: isDevMode ? keys.AUTH_DOMAIN : process.env.AUTH_DOMAIN,
-	projectId: isDevMode ? keys.PROJECT_ID : process.env.PROJECT_ID,
-	storageBucket: isDevMode ? keys.STORAGE_BUCKET : process.env.STORAGE_BUCKET,
-	messagingSenderId: isDevMode
-		? keys.MESSAGING_SENDER_ID
-		: process.env.MESSAGING_SENDER_ID,
-	appId: isDevMode ? keys.APP_ID : process.env.APP_ID,
+	apiKey: API_KEY,
+	authDomain: AUTH_DOMAIN,
+	projectId: PROJECT_ID,
+	storageBucket: STORAGE_BUCKET,
+	messagingSenderId: MESSAGING_SENDER_ID,
+	appId: APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
 const db = getFirestore(app);
 
